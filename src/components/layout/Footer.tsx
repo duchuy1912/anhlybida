@@ -38,7 +38,7 @@ export default function Footer() {
         <div className={styles.col}>
           <h3>Anhly Bida</h3>
           <p>Uy Tín - Chất Lượng - Đẳng Cấp</p>
-          <p>Chuyên cung cấp các loại cơ bida và phụ kiện chính hãng với giá tốt nhất thị trường.</p>
+          <p>Xưởng trực tiếp gia công, sản xuất và cung cấp các loại cơ bida, phụ kiện bida chất lượng với giá tốt nhất thị trường.</p>
         </div>
         <div className={styles.col}>
           <h3>Liên kết</h3>

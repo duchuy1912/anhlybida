@@ -74,7 +74,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <ContactPopup contactInfo={contactInfo} />
           </div>
           
-          <div className={styles.guarantee}>
+          <div className={styles.guarantee} style={{ display: 'none' }}>
             <p>✓ Giao hàng hỏa tốc toàn quốc</p>
             <p>✓ Bảo hành cong vênh 12 tháng</p>
             <p>✓ Tặng kèm bao da, lơ và găng tay</p>
