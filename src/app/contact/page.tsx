@@ -130,8 +130,8 @@ export default async function ContactPage() {
               </a>
             )}
 
-            {contactInfo.zalo && (
-              <a href={contactInfo.zalo} target="_blank" rel="noopener noreferrer" className="social-btn" title="Zalo">
+            {contactInfo.phone && (
+              <a href={`https://zalo.me/${contactInfo.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="social-btn" title="Zalo">
                 <ZaloIcon />
               </a>
             )}

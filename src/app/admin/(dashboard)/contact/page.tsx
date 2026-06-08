@@ -180,8 +180,10 @@ export default function AdminContactPage() {
 
           <div>
             <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--color-accent)', borderBottom: '2px solid rgba(150,150,150,0.2)', paddingBottom: '0.5rem' }}>Mạng Xã Hội & Chat</h3>
-            <label style={labelStyle}>Đường dẫn (Link) Zalo</label>
-            <input type="text" name="zalo" value={formData.zalo} onChange={handleChange} style={inputStyle} placeholder="Ví dụ: https://zalo.me/0367755966" />
+            <div style={{ display: 'none' }}>
+              <label style={labelStyle}>Đường dẫn (Link) Zalo</label>
+              <input type="text" name="zalo" value={formData.zalo} onChange={handleChange} style={inputStyle} placeholder="Ví dụ: https://zalo.me/0367755966" />
+            </div>
             
             <label style={labelStyle}>Đường dẫn (Link) Facebook Messenger</label>
             <input type="text" name="facebook" value={formData.facebook} onChange={handleChange} style={inputStyle} placeholder="Ví dụ: https://m.me/Anhlyreviewt" />

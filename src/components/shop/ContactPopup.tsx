@@ -35,7 +35,7 @@ export default function ContactPopup({
   }, []);
 
   const phone = contactInfo.phone || '0367755966';
-  const zalo = contactInfo.zalo || 'https://zalo.me/0367755966';
+  const zalo = phone ? 'https://zalo.me/' + phone.replace(/\D/g, '') : 'https://zalo.me/0367755966';
   const facebook = contactInfo.facebook || 'https://m.me/Anhlyreviewt';
   const mapUrl = contactInfo.map_url || 'https://maps.google.com';
   const faqs = contactInfo.faqs || [];
