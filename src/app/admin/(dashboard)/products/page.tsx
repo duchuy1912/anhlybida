@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { Trash2, Edit } from 'lucide-react';
+import { Trash2, Edit, Copy } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { removeVietnameseTones } from '@/utils/string';
 
 export default function AdminProducts() {
@@ -13,6 +14,7 @@ export default function AdminProducts() {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const [categories, setCategories] = useState<any[]>([]);
+  const router = useRouter();
 
   const fetchProducts = async () => {
     const { data: prodData, error: prodErr } = await supabase
@@ -49,6 +51,32 @@ export default function AdminProducts() {
         alert('Lỗi khi xóa sản phẩm: ' + error.message);
       } else {
         setProducts(products.filter(p => p.id !== id));
+      }
+    }
+  };
+
+  const handleDuplicate = async (product: any) => {
+    if (window.confirm(`Nhân bản sản phẩm: ${product.name}?`)) {
+      setLoading(true);
+      // Create a copy of the product, omitting id and created_at
+      const { id, created_at, ...productData } = product;
+      const newProduct = {
+        ...productData,
+        name: `${productData.name} (Copy)`
+      };
+
+      const { data, error } = await supabase
+        .from('products')
+        .insert([newProduct])
+        .select()
+        .single();
+
+      if (error) {
+        alert('Lỗi khi nhân bản sản phẩm: ' + error.message);
+        setLoading(false);
+      } else if (data) {
+        // Redirect to edit page
+        router.push(`/admin/edit/${data.id}`);
       }
     }
   };
@@ -107,6 +135,13 @@ export default function AdminProducts() {
                     >
                       <Edit size={16} />
                     </Link>
+                    <button 
+                      onClick={() => handleDuplicate(product)}
+                      style={{ backgroundColor: '#52c41a', color: 'white', border: 'none', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}
+                      title="Nhân bản sản phẩm"
+                    >
+                      <Copy size={16} />
+                    </button>
                     <button 
                       onClick={() => handleDelete(product.id, product.name)}
                       style={{ backgroundColor: '#ff4d4f', color: 'white', border: 'none', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}
