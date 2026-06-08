@@ -12,6 +12,8 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProductDetailPage({ params }: Props) {
   const resolvedParams = await params;
   
