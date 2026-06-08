@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { Search, ShoppingCart, Moon, Sun, Menu, X, Home, Headphones } from 'lucide-react';
+import { Search, ShoppingCart, Moon, Sun, Menu, X, Home, Headphones, Download } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from 'next-themes';
 import { useLanguage } from '@/context/LanguageContext';
@@ -29,6 +29,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [contactInfo, setContactInfo] = useState<any>({});
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   
   // Trạng thái theo dõi cuộn trang
   const [showBottomNav, setShowBottomNav] = useState(true);
@@ -46,8 +47,27 @@ export default function Navbar() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
   }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -229,6 +249,19 @@ export default function Navbar() {
               </button>
             </div>
             <div className={styles.mobileSidebarLinks}>
+              {deferredPrompt && (
+                <button 
+                  onClick={handleInstallClick}
+                  style={{ 
+                    margin: '10px 20px', padding: '12px', background: 'var(--color-accent)', 
+                    color: '#000', border: 'none', borderRadius: '8px', 
+                    fontWeight: 'bold', display: 'flex', alignItems: 'center', 
+                    justifyContent: 'center', gap: '8px', cursor: 'pointer' 
+                  }}
+                >
+                  <Download size={20} /> Cài đặt App (PWA)
+                </button>
+              )}
               <Link href="/" className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>{t('home')}</Link>
               <Link href="/shop" className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>{t('shop')}</Link>
               <Link href="/about" className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>{t('about')}</Link>
