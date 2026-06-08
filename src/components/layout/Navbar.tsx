@@ -115,8 +115,8 @@ export default function Navbar() {
         {/* Mobile Hamburger */}
         <button 
           className={styles.mobileMenuBtn} 
-          onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="Mở menu"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           <Menu size={24} />
         </button>

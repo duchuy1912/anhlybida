@@ -416,7 +416,7 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .mobileMenuBtn {
-    display: none;
+    display: block;
   }
   
   .links {
