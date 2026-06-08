@@ -110,6 +110,23 @@ export default function CheckoutPage() {
 
       if (error) throw error;
 
+      // Build items list for Telegram
+      const itemsListText = items.map((item, index) => {
+        const cat = item.category ? `(${item.category})` : '';
+        const priceStr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price);
+        
+        let optionText = '';
+        if (item.selectedOptions) {
+          const opts = [];
+          if (item.selectedOptions.shaft) opts.push(`Ngọn: ${item.selectedOptions.shaft.name}`);
+          if (item.selectedOptions.upgrades?.length) opts.push(`NC: ${item.selectedOptions.upgrades.join(', ')}`);
+          if (item.selectedOptions.engraving) opts.push(`Khắc: ${item.selectedOptions.engraving.text}`);
+          if (opts.length > 0) optionText = `\n   ↳ ` + opts.join(' | ');
+        }
+        
+        return `${index + 1}. ${item.name} ${cat} x${item.quantity} - ${priceStr}${optionText}`;
+      }).join('\n');
+
       // Notify Telegram
       try {
         const message = `🚨 <b>CÓ ĐƠN HÀNG MỚI!</b>
@@ -117,7 +134,10 @@ export default function CheckoutPage() {
 📱 <b>SĐT:</b> ${formData.phone}
 📍 <b>Địa chỉ:</b> ${finalAddress}
 💰 <b>Tổng tiền:</b> ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice)}
-📝 <b>Ghi chú:</b> ${formData.notes || 'Không có'}`;
+📝 <b>Ghi chú:</b> ${formData.notes || 'Không có'}
+
+📦 <b>DANH SÁCH SẢN PHẨM:</b>
+${itemsListText}`;
 
         await fetch('/api/telegram', {
           method: 'POST',
@@ -222,7 +242,9 @@ export default function CheckoutPage() {
                 <div className={styles.itemInfo}>
                   <img src={item.image} alt={item.name} className={styles.itemImage} />
                   <div>
-                    <div className={styles.itemName}>{item.name}</div>
+                    <div className={styles.itemName}>
+                      {item.name} {item.category && <span style={{fontSize: '0.85em', color: '#666'}}>({item.category})</span>}
+                    </div>
                     
                     {item.selectedOptions && (
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '2px', marginBottom: '4px', lineHeight: '1.4' }}>

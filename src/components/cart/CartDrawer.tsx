@@ -47,7 +47,9 @@ export default function CartDrawer() {
                   <div className={styles.itemDetails}>
                     <div>
                       <div className={styles.itemHeader}>
-                        <h4 className={styles.itemName}>{item.name}</h4>
+                        <h4 className={styles.itemName}>
+                          {item.name} {item.category && <span style={{fontSize: '0.85em', color: '#666'}}>({item.category})</span>}
+                        </h4>
                         <button onClick={() => removeFromCart(item.cartItemId || item.id)} className={styles.removeBtn}><X size={16} /></button>
                       </div>
                       

@@ -14,6 +14,7 @@ interface ProductOrderFormProps {
     price: number;
     images: string[];
     specs: any;
+    category?: string;
     description?: string;
   };
 }
@@ -51,6 +52,7 @@ export default function ProductOrderForm({ product }: ProductOrderFormProps) {
             name: product.name,
             price: totalPrice,
             image: productImages[0],
+            category: product.category,
             selectedOptions: selectedOptions
           }} 
         />

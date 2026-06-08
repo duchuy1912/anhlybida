@@ -10,6 +10,7 @@ interface AddToCartButtonProps {
     name: string;
     price: number;
     image: string;
+    category?: string;
     selectedOptions?: any;
   };
 }
@@ -24,6 +25,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
       name: product.name,
       price: product.price,
       image: product.image,
+      category: product.category,
       quantity: 1,
       selectedOptions: product.selectedOptions
     });
