@@ -1,0 +1,264 @@
+.productPage {
+  padding: 2rem 1rem 5rem;
+}
+
+.breadcrumbs {
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.breadcrumbs a {
+  transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+  color: var(--color-accent);
+}
+
+.separator {
+  margin: 0 0.5rem;
+}
+
+.current {
+  color: var(--color-primary-dark);
+  font-weight: 500;
+}
+
+.productLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .productLayout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.imageSection {
+  flex: 1;
+  width: 100%;
+}
+
+.infoSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.category {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+}
+
+.divider {
+  height: 1px;
+  background-color: rgba(0,0,0,0.1);
+  margin-bottom: 1.5rem;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--color-text-main);
+}
+
+.specs {
+  margin-bottom: 2.5rem;
+}
+
+.specs h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary-dark);
+}
+
+.specs ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.specs li {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+.specsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.specsTable th {
+  text-align: left;
+  padding: 0.75rem 1rem 0.75rem 0;
+  font-weight: 600;
+  width: 35%;
+  color: var(--color-primary-dark);
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+
+.specsTable td {
+  text-align: left;
+  padding: 0.75rem 0;
+  color: var(--color-text-main);
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+
+.specsTable tr:last-child th,
+.specsTable tr:last-child td {
+  border-bottom: none;
+}
+
+.specs h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary-dark);
+  text-transform: uppercase;
+}
+
+:global([data-theme='dark']) .specs h2,
+:global([data-theme='dark']) .specsTable th {
+  color: var(--color-accent);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 576px) {
+  .actions {
+    flex-direction: row;
+  }
+}
+
+.buyButton, .contactButton {
+  flex: 1;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buyButton {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+.buyButton:hover {
+  background-color: var(--color-accent-light);
+  transform: translateY(-2px);
+}
+
+.contactButton {
+  background-color: transparent;
+  border: 2px solid var(--color-primary-dark);
+  color: var(--color-primary-dark);
+}
+
+.contactButton:hover {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.guarantee {
+  background-color: rgba(196, 164, 112, 0.1);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--color-accent);
+}
+
+.guarantee p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--color-primary-dark);
+  font-weight: 500;
+}
+
+.guarantee p:last-child {
+  margin-bottom: 0;
+}
+
+:global([data-theme='dark']) .current, :global([data-theme='dark']) .title, :global([data-theme='dark']) .specs h3, :global([data-theme='dark']) .guarantee p { 
+    color: var(--color-accent);}
+:global([data-theme='dark']) .contactButton { 
+    border-color: var(--color-accent);
+    color: var(--color-accent);}
+:global([data-theme='dark']) .contactButton:hover { 
+    background-color: var(--color-accent);
+    color: var(--color-primary-dark);}
+:global([data-theme='dark']) .imageSection { 
+    border-color: rgba(255,255,255,0.15);}
+:global([data-theme='dark']) .divider, :global([data-theme='dark']) .specs li { 
+    border-color: rgba(255,255,255,0.2);}
+
+.mobileAccordionContainer {
+  margin-top: 1rem;
+}
+.accordionItem {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+:global([data-theme='dark']) .accordionItem {
+  border-bottom-color: rgba(255,255,255,0.2);
+}
+.accordionHeader {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+:global([data-theme='dark']) .accordionHeader {
+  color: var(--color-accent);
+}
+.accordionIcon {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  line-height: 1;
+}
+.accordionContent {
+  padding-bottom: 1rem;
+  animation: fadeIn 0.3s ease;
+}

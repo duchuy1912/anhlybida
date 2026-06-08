@@ -1,0 +1,112 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 700px;
+  background: var(--color-bg);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.input, .select, .textarea {
+  padding: 0.8rem;
+  border: 1px solid rgba(150,150,150,0.3);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text-main);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.imageGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.imagePreview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(150,150,150,0.3);
+}
+
+.imagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255,0,0,0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.submitBtn {
+  padding: 1rem;
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.submitBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+:global([data-theme='dark']) .form { 
+    background: #1f1f1f;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);}
+:global([data-theme='dark']) .formGroup label { color: var(--color-accent);}
+:global([data-theme='dark']) .input, :global([data-theme='dark']) .select, :global([data-theme='dark']) .textarea { 
+    background: #2a2a2a;
+    border-color: rgba(255,255,255,0.15);
+    color: white;}
+:global([data-theme='dark']) .submitBtn:disabled {
+    background-color: #444;
+    color: #888;
+}
+

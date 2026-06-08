@@ -1,0 +1,195 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import ProductCard from '@/components/shop/ProductCard';
+import { removeVietnameseTones } from '@/utils/string';
+import { useLanguage } from '@/context/LanguageContext';
+import styles from './page.module.css';
+
+interface ShopContentProps {
+  initialProducts: any[];
+}
+
+export default function ShopContent({ initialProducts }: ShopContentProps) {
+  const { t, language } = useLanguage();
+  const searchParams = useSearchParams();
+  const categoryQuery = searchParams.get('category');
+  const searchQuery = searchParams.get('search');
+  
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [categories, setCategories] = useState<any[]>([{ id: 'all', name: 'all', slug: 'all', filter: 'all' }]);
+
+  // Lọc giá và màu sắc
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(50000000);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const availableColors = Array.from(new Set(initialProducts
+    .map(p => {
+      if (p.specs && !Array.isArray(p.specs) && p.specs.color) {
+        return p.specs.color;
+      }
+      return null;
+    })
+    .filter(Boolean) as string[]
+  ));
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { supabase } = await import('@/lib/supabaseClient');
+      const { data } = await supabase.from('categories').select('*').order('name');
+      
+      if (data) {
+        const formattedCats = [
+          { id: 'all', name: 'all', slug: 'all', filter: 'all' },
+          ...data.map(c => ({ id: c.slug, name: c.name, slug: c.slug, filter: c.name }))
+        ];
+        setCategories(formattedCats);
+        
+        if (categoryQuery) {
+          const matched = formattedCats.find(c => c.slug === categoryQuery);
+          if (matched) {
+            setActiveCategory(matched.filter);
+          }
+        }
+      }
+    };
+    
+    fetchCategories();
+  }, [categoryQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setActiveCategory("all");
+    }
+  }, [searchQuery]);
+
+  let filteredProducts = activeCategory === "all" 
+    ? initialProducts 
+    : initialProducts.filter(p => p.category === activeCategory);
+
+  if (searchQuery) {
+    const q = removeVietnameseTones(searchQuery);
+    filteredProducts = filteredProducts.filter(p => 
+      removeVietnameseTones(p.name).includes(q) || 
+      (p.description && removeVietnameseTones(p.description).includes(q))
+    );
+  }
+
+  // Lọc theo Giá
+  filteredProducts = filteredProducts.filter(p => p.price >= minPrice && p.price <= maxPrice);
+
+  // Lọc theo Màu sắc
+  if (selectedColor) {
+    filteredProducts = filteredProducts.filter(p => {
+      if (p.specs && !Array.isArray(p.specs)) {
+        return p.specs.color === selectedColor;
+      }
+      return false;
+    });
+  }
+
+  const handleClearFilters = () => {
+    setActiveCategory("all");
+    setMinPrice(0);
+    setMaxPrice(50000000);
+    setSelectedColor(null);
+  };
+
+  return (
+    <div className={styles.shopLayout}>
+      <aside className={styles.sidebar}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h3 className={styles.filterTitle} style={{ margin: 0 }}>{t('filter')}</h3>
+          <button onClick={handleClearFilters} className={styles.clearFilterBtn}>✖ {t('clear')}</button>
+        </div>
+
+        <div className={styles.filterGroup}>
+          <h4 className={styles.filterSubtitle}>{t('categories')}</h4>
+          <ul className={styles.filterList}>
+            {categories.map(cat => (
+              <li key={cat.id}>
+                <button 
+                  className={`${styles.filterBtn} ${activeCategory === cat.filter ? styles.activeFilter : ''}`}
+                  onClick={() => setActiveCategory(cat.filter)}
+                >
+                  {cat.id === 'all' ? t('all') : cat.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className={styles.filterGroup}>
+          <h4 className={styles.filterSubtitle}>{t('price')}</h4>
+          <div className={styles.priceFilter}>
+            <input 
+              type="range" 
+              min="0" max="50000000" step="500000"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+              className={styles.priceSlider}
+            />
+            <div className={styles.priceInputs}>
+              <div className={styles.priceInputWrapper}>
+                <input 
+                  type="number" 
+                  value={minPrice} 
+                  onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)} 
+                  className={styles.priceInput}
+                />
+                <span>đ</span>
+              </div>
+              <span className={styles.priceSeparator}>-</span>
+              <div className={styles.priceInputWrapper}>
+                <input 
+                  type="number" 
+                  value={maxPrice} 
+                  onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)} 
+                  className={styles.priceInput}
+                />
+                <span>đ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {availableColors.length > 0 && (
+          <div className={styles.filterGroup}>
+            <h4 className={styles.filterSubtitle}>{t('color')}</h4>
+            <div className={styles.colorFilter}>
+              {availableColors.map((color, idx) => (
+                <button 
+                  key={idx}
+                  className={`${styles.colorBtn} ${selectedColor === color ? styles.activeColor : ''}`}
+                  onClick={() => setSelectedColor(color === selectedColor ? null : color)}
+                >
+                  {color}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+
+      <div className={styles.mainContent}>
+        <div className={styles.resultsCount}>
+          {t('showing')} <strong>{filteredProducts.length}</strong> {t('products')}
+        </div>
+        
+        {filteredProducts.length > 0 ? (
+          <div className={styles.productGrid}>
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.emptyState}>
+            {t('noProducts')}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,249 @@
+.shopPage {
+  padding: 4rem 1rem;
+  min-height: 80vh;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--color-primary-dark);
+  text-align: center;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+}
+
+.shopLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .shopLayout {
+    flex-direction: row;
+  }
+}
+
+.sidebar {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 250px;
+  }
+}
+
+.filterTitle {
+  font-size: 1.5rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  font-family: var(--font-heading);
+}
+
+.filterList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterBtn {
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 1.1rem;
+  font-family: var(--font-body);
+  color: var(--color-text-main);
+  cursor: pointer;
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 100%;
+  border: 1px solid transparent;
+}
+
+.filterBtn:hover {
+  background-color: rgba(196, 164, 112, 0.1);
+  color: var(--color-accent);
+  border-color: rgba(196, 164, 112, 0.3);
+}
+
+.activeFilter {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  font-weight: bold;
+}
+
+.activeFilter:hover {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+.mainContent {
+  flex-grow: 1;
+}
+
+.resultsCount {
+  margin-bottom: 2rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 576px) {
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .productGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  background-color: rgba(0,0,0,0.02);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+}
+
+.loading {
+  text-align: center;
+  padding: 5rem;
+  font-size: 1.2rem;
+  color: var(--color-accent);
+}
+
+:global([data-theme='dark']) .title, :global([data-theme='dark']) .filterTitle { 
+    color: var(--color-accent);}
+:global([data-theme='dark']) .emptyState { 
+    background-color: rgba(255,255,255,0.02);}
+:global([data-theme='dark']) .filterBtn:hover { 
+    background-color: rgba(196, 164, 112, 0.15);}
+:global([data-theme='dark']) .activeFilter,
+:global([data-theme='dark']) .activeFilter:hover {
+    background-color: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+.clearFilterBtn {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.clearFilterBtn:hover {
+  text-decoration: underline;
+}
+
+.filterGroup {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+
+:global([data-theme='dark']) .filterGroup {
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+
+.filterSubtitle {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-main);
+}
+
+.priceFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.priceSlider {
+  width: 100%;
+}
+
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.priceInputWrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  padding: 0 0.5rem;
+  flex: 1;
+  background: var(--color-bg-light);
+}
+
+:global([data-theme='dark']) .priceInputWrapper {
+  background: #2a2a2a;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.priceInput {
+  width: 100%;
+  border: none;
+  padding: 0.5rem;
+  background: transparent;
+  color: var(--color-text-main);
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.priceSeparator {
+  color: var(--color-text-muted);
+}
+
+.colorFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.colorBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 20px;
+  background: var(--color-bg-light);
+  color: var(--color-text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+:global([data-theme='dark']) .colorBtn {
+  background: #2a2a2a;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.colorBtn:hover {
+  border-color: var(--color-accent);
+}
+
+.activeColor {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+:global([data-theme='dark']) .activeColor {
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+}

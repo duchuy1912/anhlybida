@@ -1,0 +1,137 @@
+.optionsContainer {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background-color: var(--color-bg-light);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+:global([data-theme='dark']) .optionsContainer {
+  background-color: #1f1f1f;
+  border-color: rgba(255,255,255,0.1);
+}
+
+.optionsTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 0.5rem;
+  border-radius: 20px;
+  margin-top: -2.2rem;
+  background: white;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-main);
+}
+
+:global([data-theme='dark']) .optionsTitle {
+  background: #333;
+  border-color: rgba(255,255,255,0.1);
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  color: var(--color-text-main);
+  font-weight: 600;
+}
+
+.shaftsList, .upgradesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.shaftOption, .upgradeOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+:global([data-theme='dark']) .shaftOption,
+:global([data-theme='dark']) .upgradeOption {
+  background: #2a2a2a;
+  border-color: rgba(255,255,255,0.15);
+}
+
+.shaftOption.selected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.shaftRadio, .upgradeCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.shaftPrice, .upgradePrice {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.selected .shaftPrice {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: white;
+  color: var(--color-text-main);
+}
+
+:global([data-theme='dark']) .input,
+:global([data-theme='dark']) .textarea {
+  background: #2a2a2a;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.engravingHelper {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.engravingStyles {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.8rem;
+  align-items: center;
+}
+
+.subLabel {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.engravingStyles label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--color-text-main);
+}

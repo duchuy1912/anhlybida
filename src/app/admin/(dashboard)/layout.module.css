@@ -1,0 +1,199 @@
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-light);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+:global([data-theme='dark']) .adminLayout {
+  background-color: var(--color-bg);
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #001529;
+  color: rgba(255, 255, 255, 0.65);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+:global([data-theme='dark']) .sidebar {
+  background-color: #111;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  background-color: #002140;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: #1890ff;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  flex: 1;
+}
+
+.nav a, .logoutBtn {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  font-size: 0.95rem;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.nav a:hover, .logoutBtn:hover {
+  color: white;
+  background-color: #1890ff;
+}
+
+.activeLink {
+  color: white !important;
+  background-color: #1890ff !important;
+}
+
+.logoutBtn {
+  color: #ff4d4f;
+  margin-top: auto;
+}
+
+.logoutBtn:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  height: 64px;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  font-weight: 500;
+  z-index: 10;
+}
+
+:global([data-theme='dark']) .header {
+  background: #1f1f1f;
+  color: var(--color-text-main);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menuToggleBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.contentWrapper {
+  padding: 2rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+}
+
+:global([data-theme='dark']) .card {
+  background: #1f1f1f;
+  color: var(--color-text-main);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 90;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+  }
+  
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+  
+  .overlayOpen {
+    display: block;
+  }
+  
+  .menuToggleBtn {
+    display: block;
+  }
+  
+  .contentWrapper {
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  color: #262626;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}

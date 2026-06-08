@@ -1,0 +1,255 @@
+.triggerButton {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--color-primary-dark);
+  border-radius: 6px;
+  color: var(--color-primary-dark);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.triggerButton:hover {
+  background: var(--color-primary-dark);
+  color: white;
+}
+
+:global([data-theme='dark']) .triggerButton {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+:global([data-theme='dark']) .triggerButton:hover {
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Popup */
+.popup {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+:global([data-theme='dark']) .popup {
+  background: #2d2d2d;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+:global([data-theme='dark']) .header {
+  border-bottom-color: #444;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #262626;
+}
+
+:global([data-theme='dark']) .header h3 {
+  color: #f0f0f0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+:global([data-theme='dark']) .closeBtn:hover {
+  background: #444;
+  color: #f0f0f0;
+}
+
+/* Options */
+.options {
+  padding: 0.5rem 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+
+.option:hover {
+  background: #f8f9fa;
+}
+
+:global([data-theme='dark']) .option:hover {
+  background: #3a3a3a;
+}
+
+.iconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.optionInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionInfo strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #262626;
+}
+
+:global([data-theme='dark']) .optionInfo strong {
+  color: #ffffff;
+}
+
+.optionInfo span {
+  font-size: 0.82rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+:global([data-theme='dark']) .optionInfo span {
+  color: #bbbbbb;
+}
+
+/* FAQ Styles */
+.faqList {
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.faqItem {
+  margin-bottom: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:global([data-theme='dark']) .faqItem {
+  border-color: rgba(255,255,255,0.15);
+}
+
+.faqQuestion {
+  width: 100%;
+  padding: 1rem;
+  background: #fafafa;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #333;
+}
+
+:global([data-theme='dark']) .faqQuestion {
+  background: #3a3a3a;
+  color: #ffffff;
+}
+
+.faqAnswer {
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+:global([data-theme='dark']) .faqAnswer {
+  background: #2d2d2d;
+  color: #ccc;
+  border-top-color: #444;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.backBtn:hover {
+  color: #333;
+}
+
+:global([data-theme='dark']) .backBtn {
+  color: #aaa;
+}
+
+:global([data-theme='dark']) .backBtn:hover {
+  color: #eee;
+}
