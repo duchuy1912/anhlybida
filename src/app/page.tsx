@@ -5,13 +5,13 @@ export const dynamic = 'force-dynamic';
 
 // Định nghĩa server component để tự động fetch data khi load trang
 export default async function Home() {
-  // Lấy toàn bộ sản phẩm từ DB
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .order('created_at', { ascending: false });
+  const [{ data: products }, { data: categories }] = await Promise.all([
+    supabase.from('products').select('*').order('created_at', { ascending: false }),
+    supabase.from('categories').select('*').order('name')
+  ]);
 
   const allProducts = products || [];
+  const allCategories = categories || [];
 
-  return <HomeContent allProducts={allProducts} />;
+  return <HomeContent allProducts={allProducts} categories={allCategories} />;
 }

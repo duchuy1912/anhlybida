@@ -7,22 +7,25 @@ import ProductCard from "@/components/shop/ProductCard";
 import { useLanguage } from "@/context/LanguageContext";
 import styles from "./page.module.css";
 
-const categoriesData = [
-  { id: "co-libre", name: "Cơ Libre", filter: "Cơ Libre" },
-  { id: "co-3-bang", name: "Cơ 3 Băng", filter: "Cơ 3 Băng" },
-  { id: "co-pool", name: "Cơ Pool", filter: "Cơ Pool" },
-  { id: "phu-kien", name: "Phụ Kiện", filter: "Phụ Kiện" },
-];
 
-export default function HomeContent({ allProducts }: { allProducts: any[] }) {
+export default function HomeContent({ allProducts, categories = [] }: { allProducts: any[], categories?: any[] }) {
   const { t } = useLanguage();
+
+  // If DB categories are available, use them, otherwise fallback to extracting from products
+  const activeCategories = categories.length > 0 
+    ? categories.map(c => ({ id: c.slug, name: c.name, filter: c.name }))
+    : Array.from(new Set(allProducts.map(p => p.category))).filter(Boolean).map(cat => ({
+        id: cat,
+        name: cat,
+        filter: cat
+      }));
 
   return (
     <main>
       <HeroSection />
       <FeaturesSection />
       <div className="container" style={{ padding: '5rem 1rem' }}>
-        {categoriesData.map((category) => {
+        {activeCategories.map((category) => {
           const categoryProducts = allProducts
             .filter(p => p.category === category.filter)
             .slice(0, 4);
