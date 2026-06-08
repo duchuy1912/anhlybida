@@ -228,7 +228,9 @@ export default function AdminOrders() {
                   <ul style={{ paddingLeft: '1.2rem', margin: 0, color: 'var(--color-text-muted)' }}>
                     {order.items.map((item: any, idx: number) => (
                       <li key={item.cartItemId || item.id || idx} style={{ marginBottom: '0.5rem' }}>
-                        <div>{item.name} <strong>x{item.quantity}</strong></div>
+                        <div>
+                          {item.name} {item.category && <span style={{fontSize: '0.85em', color: '#666'}}>({item.category})</span>} <strong>x{item.quantity}</strong>
+                        </div>
                         {item.selectedOptions && (
                           <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                             {item.selectedOptions.shaft && <div>- Ngọn: {item.selectedOptions.shaft.name}</div>}
