@@ -31,7 +31,7 @@ export default function ProductDetailsInfo({ product }: ProductDetailsInfoProps)
   }, []);
 
   const descContent = (
-    <p className={styles.description} style={{ marginTop: '1rem' }}>
+    <p className={styles.description} style={{ marginTop: '1rem', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
       {product.description || 'Sản phẩm bida cao cấp, thiết kế độc quyền với độ chính xác và cân bằng hoàn hảo.'}
     </p>
   );
