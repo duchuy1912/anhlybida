@@ -15,8 +15,15 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Anhly - Cơ Bida Đẳng Cấp",
+  title: "Bida Anh Lý - Cơ Bida Đẳng Cấp",
   description: "Cửa hàng bán cơ bida và phụ kiện bida uy tín, chất lượng.",
+  appleWebApp: {
+    capable: true,
+    title: "Bida Anh Lý",
+    statusBarStyle: "black-translucent",
+  },
+  applicationName: "Bida Anh Lý",
+  themeColor: "#1e5a3e",
 };
 
 export default function RootLayout({
