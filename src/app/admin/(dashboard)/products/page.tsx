@@ -6,6 +6,7 @@ import { Trash2, Edit, Copy } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { removeVietnameseTones } from '@/utils/string';
+import ConfirmModal from '@/components/admin/ConfirmModal';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<any[]>([]);
@@ -15,6 +16,20 @@ export default function AdminProducts() {
 
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
+
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'danger' | 'info' | 'warning';
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: () => {}
+  });
 
   const fetchProducts = async () => {
     const { data: prodData, error: prodErr } = await supabase
@@ -40,45 +55,57 @@ export default function AdminProducts() {
     fetchProducts();
   }, []);
 
-  const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`Xác nhận xóa vĩnh viễn sản phẩm "${name.trim()}"?`)) {
-      const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', id);
-        
-      if (error) {
-        alert('Lỗi khi xóa sản phẩm: ' + error.message);
-      } else {
-        setProducts(products.filter(p => p.id !== id));
+  const handleDelete = (id: string, name: string) => {
+    setModalConfig({
+      isOpen: true,
+      title: 'Xóa sản phẩm',
+      message: `Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm "${name.trim()}"? Hành động này không thể hoàn tác.`,
+      type: 'danger',
+      onConfirm: async () => {
+        const { error } = await supabase
+          .from('products')
+          .delete()
+          .eq('id', id);
+          
+        if (error) {
+          alert('Lỗi khi xóa sản phẩm: ' + error.message);
+        } else {
+          setProducts(prev => prev.filter(p => p.id !== id));
+        }
       }
-    }
+    });
   };
 
-  const handleDuplicate = async (product: any) => {
-    if (window.confirm(`Xác nhận nhân bản sản phẩm "${product.name.trim()}"?`)) {
-      setLoading(true);
-      // Create a copy of the product, omitting id and created_at
-      const { id, created_at, ...productData } = product;
-      const newProduct = {
-        ...productData,
-        name: productData.name
-      };
+  const handleDuplicate = (product: any) => {
+    setModalConfig({
+      isOpen: true,
+      title: 'Nhân bản sản phẩm',
+      message: `Bạn muốn tạo một bản sao của sản phẩm "${product.name.trim()}"?`,
+      type: 'info',
+      onConfirm: async () => {
+        setLoading(true);
+        // Create a copy of the product, omitting id and created_at
+        const { id, created_at, ...productData } = product;
+        const newProduct = {
+          ...productData,
+          name: productData.name
+        };
 
-      const { data, error } = await supabase
-        .from('products')
-        .insert([newProduct])
-        .select()
-        .single();
+        const { data, error } = await supabase
+          .from('products')
+          .insert([newProduct])
+          .select()
+          .single();
 
-      if (error) {
-        alert('Lỗi khi nhân bản sản phẩm: ' + error.message);
-        setLoading(false);
-      } else if (data) {
-        // Redirect to edit page
-        router.push(`/admin/edit/${data.id}`);
+        if (error) {
+          alert('Lỗi khi nhân bản sản phẩm: ' + error.message);
+          setLoading(false);
+        } else if (data) {
+          // Redirect to edit page
+          router.push(`/admin/edit/${data.id}`);
+        }
       }
-    }
+    });
   };
 
   const filteredProducts = products.filter(p => {
@@ -161,6 +188,15 @@ export default function AdminProducts() {
           })}
         </div>
       )}
+
+      <ConfirmModal 
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type={modalConfig.type}
+        onConfirm={modalConfig.onConfirm}
+        onCancel={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 }
