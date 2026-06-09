@@ -6,9 +6,9 @@ import { redirect } from 'next/navigation';
 export async function loginAction(formData: FormData) {
   const password = formData.get('password');
 
-  // Hardcode password for now (e.g., "admin123")
-  // In a real application, check against a database or environment variable
-  if (password === 'admin123') {
+  // Hardcode password
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Faal#U$Nwe8iOoac3no!u*Vf';
+  if (password === ADMIN_PASSWORD) {
     const cookieStore = await cookies();
     cookieStore.set('admin_auth', 'true', { 
       httpOnly: true, 
