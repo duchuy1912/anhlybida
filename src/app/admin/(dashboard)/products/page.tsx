@@ -7,12 +7,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { removeVietnameseTones } from '@/utils/string';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import Pagination from '@/components/ui/Pagination';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
 
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
@@ -118,6 +122,14 @@ export default function AdminProducts() {
     return matchesSearch && matchesCategory;
   });
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   if (loading) return <div>Đang tải danh sách sản phẩm...</div>;
 
   return (
@@ -144,13 +156,14 @@ export default function AdminProducts() {
         </select>
       </div>
 
-      {filteredProducts.length === 0 ? (
+      {paginatedProducts.length === 0 ? (
         <div style={{ padding: '2rem', backgroundColor: '#f9f9f9', borderRadius: '8px', textAlign: 'center' }}>
           Không tìm thấy sản phẩm nào.
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          {filteredProducts.map(product => {
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            {paginatedProducts.map(product => {
             const displayImage = product.images?.[0] || '/images/cue_1.png';
             const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price);
             
@@ -190,7 +203,16 @@ export default function AdminProducts() {
               </div>
             );
           })}
-        </div>
+          </div>
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </>
       )}
 
       <ConfirmModal 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import Pagination from '@/components/ui/Pagination';
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -9,6 +10,9 @@ export default function AdminOrders() {
   const [activeTab, setActiveTab] = useState<'active' | 'history'>('active');
   const [mounted, setMounted] = useState(false);
   const [newOrderToast, setNewOrderToast] = useState<any>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
 
   const fetchOrders = async () => {
     const { data, error } = await supabase
@@ -66,6 +70,7 @@ export default function AdminOrders() {
 
   const handleTabChange = (tab: 'active' | 'history') => {
     setActiveTab(tab);
+    setCurrentPage(1);
     try {
       localStorage.setItem('adminOrdersTab', tab);
     } catch {}
@@ -89,6 +94,10 @@ export default function AdminOrders() {
   const activeOrders = orders.filter(o => ['pending', 'processing', 'shipping'].includes(o.status));
   const historyOrders = orders.filter(o => ['completed', 'cancelled'].includes(o.status));
   const displayedOrders = activeTab === 'active' ? activeOrders : historyOrders;
+
+  const totalPages = Math.ceil(displayedOrders.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedOrders = displayedOrders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -151,13 +160,14 @@ export default function AdminOrders() {
         </div>
       </div>
       
-      {displayedOrders.length === 0 ? (
+      {paginatedOrders.length === 0 ? (
         <div style={{ padding: '2rem', backgroundColor: 'var(--color-bg-light)', borderRadius: '8px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
           Không có đơn hàng nào trong mục này.
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {displayedOrders.map(order => (
+        <>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {paginatedOrders.map(order => (
             <div key={order.id} style={{ backgroundColor: 'var(--color-bg-light)', borderRadius: '8px', padding: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(150,150,150,0.1)' }}>
                 <div>
@@ -249,7 +259,17 @@ export default function AdminOrders() {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+          
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </>
       )}
     </div>
   );

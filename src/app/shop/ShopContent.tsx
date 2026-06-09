@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/shop/ProductCard';
 import { removeVietnameseTones } from '@/utils/string';
 import { useLanguage } from '@/context/LanguageContext';
+import Pagination from '@/components/ui/Pagination';
 import styles from './page.module.css';
 
 interface ShopContentProps {
@@ -24,6 +25,9 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
 
   const availableColors = Array.from(new Set(initialProducts
     .map(p => {
@@ -89,6 +93,16 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
       return false;
     });
   }
+
+  // Reset trang về 1 khi đổi bộ lọc
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, minPrice, maxPrice, selectedColor, searchQuery]);
+
+  // Lấy danh sách sản phẩm cho trang hiện tại
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handleClearFilters = () => {
     setActiveCategory("all");
@@ -178,12 +192,23 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
           {t('showing')} <strong>{filteredProducts.length}</strong> {t('products')}
         </div>
         
-        {filteredProducts.length > 0 ? (
-          <div className={styles.productGrid}>
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
+        {paginatedProducts.length > 0 ? (
+          <>
+            <div className={styles.productGrid}>
+              {paginatedProducts.map(product => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </div>
+            
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </>
         ) : (
           <div className={styles.emptyState}>
             {t('noProducts')}
