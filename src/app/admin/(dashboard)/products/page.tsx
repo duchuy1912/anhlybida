@@ -41,7 +41,7 @@ export default function AdminProducts() {
   }, []);
 
   const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm: ${name}?`)) {
+    if (window.confirm(`Xác nhận xóa vĩnh viễn sản phẩm "${name.trim()}"?`)) {
       const { error } = await supabase
         .from('products')
         .delete()
@@ -56,7 +56,7 @@ export default function AdminProducts() {
   };
 
   const handleDuplicate = async (product: any) => {
-    if (window.confirm(`Nhân bản sản phẩm: ${product.name}?`)) {
+    if (window.confirm(`Xác nhận nhân bản sản phẩm "${product.name.trim()}"?`)) {
       setLoading(true);
       // Create a copy of the product, omitting id and created_at
       const { id, created_at, ...productData } = product;
