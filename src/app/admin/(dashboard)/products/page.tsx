@@ -22,12 +22,14 @@ export default function AdminProducts() {
     title: string;
     message: string;
     type: 'danger' | 'info' | 'warning';
+    confirmText?: string;
     onConfirm: () => void;
   }>({
     isOpen: false,
     title: '',
     message: '',
     type: 'info',
+    confirmText: 'Xác nhận',
     onConfirm: () => {}
   });
 
@@ -61,6 +63,7 @@ export default function AdminProducts() {
       title: 'Xóa sản phẩm',
       message: `Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm "${name.trim()}"? Hành động này không thể hoàn tác.`,
       type: 'danger',
+      confirmText: 'Xóa vĩnh viễn',
       onConfirm: async () => {
         const { error } = await supabase
           .from('products')
@@ -82,6 +85,7 @@ export default function AdminProducts() {
       title: 'Nhân bản sản phẩm',
       message: `Bạn muốn tạo một bản sao của sản phẩm "${product.name.trim()}"?`,
       type: 'info',
+      confirmText: 'Nhân bản',
       onConfirm: async () => {
         setLoading(true);
         // Create a copy of the product, omitting id and created_at
@@ -194,6 +198,7 @@ export default function AdminProducts() {
         title={modalConfig.title}
         message={modalConfig.message}
         type={modalConfig.type}
+        confirmText={modalConfig.confirmText}
         onConfirm={modalConfig.onConfirm}
         onCancel={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
       />

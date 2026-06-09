@@ -60,7 +60,7 @@ export default function ConfirmModal({
       animation: 'fadeIn 0.2s ease-out'
     }}>
       <div style={{
-        backgroundColor: 'var(--color-bg)',
+        backgroundColor: 'var(--color-bg-light)',
         borderRadius: '12px',
         width: '90%',
         maxWidth: '400px',
@@ -87,7 +87,7 @@ export default function ConfirmModal({
           </button>
         </div>
         
-        <div style={{ padding: '1.5rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+        <div style={{ padding: '1.5rem', color: 'var(--color-text-main)', lineHeight: 1.5, fontSize: '1rem' }}>
           {message}
         </div>
         
