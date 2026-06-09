@@ -62,7 +62,7 @@ export default function AdminProducts() {
       const { id, created_at, ...productData } = product;
       const newProduct = {
         ...productData,
-        name: `${productData.name} (Copy)`
+        name: productData.name
       };
 
       const { data, error } = await supabase
