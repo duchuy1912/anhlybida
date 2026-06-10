@@ -13,6 +13,7 @@ export default function AdminCategories() {
   
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+  const [oldName, setOldName] = useState('');
 
   const fetchCategories = async () => {
     const { data, error } = await supabase
@@ -86,6 +87,7 @@ export default function AdminCategories() {
   const startEdit = (cat: any) => {
     setEditingId(cat.id);
     setEditName(cat.name);
+    setOldName(cat.name);
   };
 
   const handleUpdate = async () => {
@@ -93,17 +95,29 @@ export default function AdminCategories() {
     
     const slug = generateSlug(editName);
     
-    const { error } = await supabase
+    const { error: catError } = await supabase
       .from('categories')
       .update({ name: editName, slug })
       .eq('id', editingId);
       
-    if (error) {
-      alert('Lỗi khi cập nhật: ' + error.message);
-    } else {
-      setCategories(categories.map(c => c.id === editingId ? { ...c, name: editName, slug } : c));
-      setEditingId(null);
+    if (catError) {
+      alert('Lỗi khi cập nhật danh mục: ' + catError.message);
+      return;
     }
+
+    if (oldName !== editName) {
+      const { error: prodError } = await supabase
+        .from('products')
+        .update({ category: editName })
+        .eq('category', oldName);
+        
+      if (prodError) {
+        console.error('Lỗi khi đồng bộ sản phẩm:', prodError);
+      }
+    }
+
+    setCategories(categories.map(c => c.id === editingId ? { ...c, name: editName, slug } : c));
+    setEditingId(null);
   };
 
   if (loading) return <div>Đang tải danh sách danh mục...</div>;
