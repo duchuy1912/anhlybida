@@ -75,7 +75,7 @@ export default function Navbar() {
       const { supabase } = await import('@/lib/supabaseClient');
       const [catsRes, prodsRes, contactRes] = await Promise.all([
         supabase.from('categories').select('*').order('name'),
-        supabase.from('products').select('id, name, price, images'),
+        supabase.from('products').select('id, name, price, images, category'),
         supabase.from('site_settings').select('value').eq('key', 'contact_info').single()
       ]);
       
@@ -203,9 +203,12 @@ export default function Navbar() {
                       />
                       <div className={styles.searchResultInfo}>
                         <span className={styles.searchResultName}>{product.name}</span>
-                        <span className={styles.searchResultPrice}>
-                          {formatPrice(product.price)}
-                        </span>
+                        <div className={styles.searchResultMeta}>
+                          {product.category && <span className={styles.searchResultCategory}>{product.category}</span>}
+                          <span className={styles.searchResultPrice}>
+                            {formatPrice(product.price)}
+                          </span>
+                        </div>
                       </div>
                     </Link>
                   ))
