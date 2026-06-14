@@ -43,7 +43,8 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
     price: initialData?.price?.toString() || '', 
     description: initialData?.description || '',
     color: parsedOptions.color || '',
-    allowEngraving: parsedOptions.allowEngraving || false
+    allowEngraving: parsedOptions.allowEngraving || false,
+    videoUrl: parsedOptions.videoUrl || ''
   });
   
   const [availableColors, setAvailableColors] = useState<string[]>([]);
@@ -191,7 +192,8 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
           color: formData.color,
           shafts: validShafts,
           upgrades: validUpgrades,
-          allowEngraving: formData.allowEngraving
+          allowEngraving: formData.allowEngraving,
+          videoUrl: formData.videoUrl
         }
       };
 
@@ -302,6 +304,11 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
           ))}
         </div>
         <small style={{color: 'var(--color-text-muted)'}}>Đã tải lên: {images.length}/10 ảnh</small>
+      </div>
+
+      <div className={styles.formGroup}>
+        <label>Link Video YouTube (Tùy chọn)</label>
+        <input type="text" className={styles.input} value={formData.videoUrl} onChange={e => setFormData({...formData, videoUrl: e.target.value})} placeholder="https://www.youtube.com/watch?v=..." />
       </div>
 
       <div className={styles.formGroup}>
