@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Montserrat } from "next/font/google";
+import { Outfit, Montserrat, Great_Vibes } from "next/font/google";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { Providers } from "@/context/Providers";
 import "./globals.css";
@@ -12,6 +12,12 @@ const outfit = Outfit({
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin", "vietnamese"],
+});
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  variable: "--font-great-vibes",
+  subsets: ["latin", "latin-ext", "vietnamese"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${outfit.variable} ${montserrat.variable}`} suppressHydrationWarning>
+    <html lang="vi" className={`${outfit.variable} ${montserrat.variable} ${greatVibes.variable}`} suppressHydrationWarning>
       <body>
         <Providers>
           <ConditionalLayout>

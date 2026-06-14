@@ -142,7 +142,7 @@ export default function Navbar() {
         </button>
 
         <Link href="/" className={styles.logo}>
-          <img src="/logo.png" alt="Anhly Bida Logo" style={{ height: '70px', width: 'auto', maxHeight: '100%' }} />
+          Lý
         </Link>
         
         {/* Desktop Links */}
@@ -243,7 +243,7 @@ export default function Navbar() {
         <div className={styles.mobileSidebarOverlay} onClick={() => setIsMobileMenuOpen(false)}>
           <div className={styles.mobileSidebar} onClick={e => e.stopPropagation()}>
             <div className={styles.mobileSidebarHeader}>
-              <img src="/logo.png" alt="Anhly Bida" style={{ height: '40px' }} />
+              <span className={styles.logoMobile}>Lý</span>
               <button className={styles.mobileCloseBtn} onClick={() => setIsMobileMenuOpen(false)}>
                 <X size={24} />
               </button>
