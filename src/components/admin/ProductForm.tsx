@@ -199,6 +199,20 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
 
       if (initialData?.id) {
         // Edit mode
+        
+        // 3. Dọn rác ảnh (Storage Leak Cleanup)
+        const deletedImages = initialData.images?.filter((oldUrl: string) => !existingImages.includes(oldUrl)) || [];
+        if (deletedImages.length > 0) {
+          const filesToRemove = deletedImages.map((url: string) => {
+            const parts = url.split('/');
+            return parts.pop();
+          }).filter(Boolean);
+          
+          if (filesToRemove.length > 0) {
+            await supabase.storage.from('product-images').remove(filesToRemove);
+          }
+        }
+
         const { error: updateError } = await supabase
           .from('products')
           .update(productPayload)

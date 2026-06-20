@@ -69,6 +69,19 @@ export default function AdminProducts() {
       type: 'danger',
       confirmText: 'Xóa vĩnh viễn',
       onConfirm: async () => {
+        const productToDelete = products.find(p => p.id === id);
+        
+        if (productToDelete?.images?.length > 0) {
+          const filesToRemove = productToDelete.images.map((url: string) => {
+            const parts = url.split('/');
+            return parts.pop();
+          }).filter(Boolean);
+          
+          if (filesToRemove.length > 0) {
+            await supabase.storage.from('product-images').remove(filesToRemove);
+          }
+        }
+
         const { error } = await supabase
           .from('products')
           .delete()
