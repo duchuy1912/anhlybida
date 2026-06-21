@@ -206,7 +206,7 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
           const filesToRemove = deletedImages.map((url: string) => {
             const parts = url.split('/');
             return parts.pop();
-          }).filter(Boolean);
+          }).filter(Boolean) as string[];
           
           if (filesToRemove.length > 0) {
             await supabase.storage.from('product-images').remove(filesToRemove);
