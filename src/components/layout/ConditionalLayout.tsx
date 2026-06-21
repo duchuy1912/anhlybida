@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import FloatingContact from "@/components/layout/FloatingContact";
 
 export default function ConditionalLayout({
   children,
@@ -16,7 +17,12 @@ export default function ConditionalLayout({
     <>
       {!isAdmin && <Navbar />}
       {children}
-      {!isAdmin && <Footer />}
+      {!isAdmin && (
+        <>
+          <FloatingContact />
+          <Footer />
+        </>
+      )}
     </>
   );
 }
