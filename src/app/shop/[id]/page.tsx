@@ -43,6 +43,22 @@ export default async function ProductDetailPage({ params }: Props) {
       console.error(e);
     }
   }
+  
+  // Fetch global_shafts
+  const { data: globalShaftsData } = await supabase
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'global_shafts')
+    .single();
+    
+  let globalShafts = {};
+  if (globalShaftsData && globalShaftsData.value) {
+    try {
+      globalShafts = typeof globalShaftsData.value === 'string' ? JSON.parse(globalShaftsData.value) : globalShaftsData.value;
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const formattedPrice = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -70,7 +86,7 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className={styles.infoSection}>
           <span className={styles.category}>{product.category}</span>
           <h1 className={styles.title}>{product.name}</h1>
-          <ProductOrderForm product={product} />
+          <ProductOrderForm product={product} globalShafts={globalShafts} />
           
           <div className={styles.actions} style={{ marginTop: '1rem' }}>
             <ContactPopup contactInfo={contactInfo} />

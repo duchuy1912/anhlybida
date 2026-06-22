@@ -56,9 +56,10 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [catRes, prodRes] = await Promise.all([
+      const [catRes, prodRes, settingsRes] = await Promise.all([
         supabase.from('categories').select('*').order('name'),
-        supabase.from('products').select('specs')
+        supabase.from('products').select('specs'),
+        supabase.from('site_settings').select('value').eq('key', 'global_shafts').single()
       ]);
       
       if (catRes.data && catRes.data.length > 0) {
@@ -89,6 +90,29 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
         });
         setAvailableColors(Array.from(colors));
         setAvailableShafts(Array.from(shaftMap.entries()).map(([name, price]) => ({ name, price })));
+      }
+      
+      // Load global shafts
+      if (settingsRes.data && settingsRes.data.value) {
+        try {
+          const globalDict = typeof settingsRes.data.value === 'string' ? JSON.parse(settingsRes.data.value) : settingsRes.data.value;
+          
+          // Pre-fill existing shafts with global data if local data is missing
+          setShafts(prevShafts => prevShafts.map(s => {
+            const globalInfo = globalDict[s.name];
+            if (globalInfo) {
+              return {
+                ...s,
+                image: s.image || globalInfo.image,
+                description: s.description || globalInfo.description,
+                specs: s.specs || globalInfo.specs
+              };
+            }
+            return s;
+          }));
+        } catch (e) {
+          console.error(e);
+        }
       }
     };
     fetchData();
@@ -180,8 +204,14 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
       const validSpecs = specs.filter((s: any) => s.name.trim() !== '' && s.value.trim() !== '');
       const validShafts = shafts.filter((s: any) => s.name.trim() !== '');
       
+      let dictionaryUpdated = false;
+      const { data: settingsRes } = await supabase.from('site_settings').select('value').eq('key', 'global_shafts').single();
+      let globalShafts = settingsRes?.value ? (typeof settingsRes.value === 'string' ? JSON.parse(settingsRes.value) : settingsRes.value) : {};
+
       // Upload ảnh cho shafts
       for (const shaft of validShafts) {
+        let hasNewDetails = false;
+        
         if (shaft.imageFile) {
           const file = shaft.imageFile;
           const fileExt = file.name.split('.').pop();
@@ -196,10 +226,30 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
               .from('product-images')
               .getPublicUrl(fileName);
             shaft.image = data.publicUrl;
+            hasNewDetails = true;
           }
         }
+        
+        if (shaft.image || shaft.description || shaft.specs) {
+          globalShafts[shaft.name] = {
+            image: shaft.image || globalShafts[shaft.name]?.image,
+            description: shaft.description || globalShafts[shaft.name]?.description,
+            specs: shaft.specs || globalShafts[shaft.name]?.specs,
+          };
+          dictionaryUpdated = true;
+        }
+
         delete shaft.imageFile;
         delete shaft.expanded;
+      }
+      
+      if (dictionaryUpdated) {
+        // Upsert into site_settings
+        const { error: settingsErr } = await supabase.from('site_settings').upsert({
+          key: 'global_shafts',
+          value: globalShafts
+        }, { onConflict: 'key' });
+        if (settingsErr) console.error("Error saving global shafts:", settingsErr);
       }
 
       const validUpgrades = upgrades.filter((u: any) => u.name.trim() !== '');

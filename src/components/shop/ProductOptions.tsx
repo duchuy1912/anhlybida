@@ -98,7 +98,6 @@ export default function ProductOptions({ basePrice, options, onTotalChange }: Pr
           <div className={styles.shaftsList}>
             {options.shafts.map((shaft, idx) => {
               const isSelected = selectedShaft?.name === shaft.name;
-              const hasDetails = shaft.image || shaft.description || shaft.specs;
               
               return (
                 <div key={idx} className={`${styles.shaftOptionWrapper} ${isSelected ? styles.selectedWrapper : ''}`}>
@@ -116,34 +115,6 @@ export default function ProductOptions({ basePrice, options, onTotalChange }: Pr
                       {shaft.price > 0 ? `+${formatPrice(shaft.price)}` : shaft.price < 0 ? `-${formatPrice(Math.abs(shaft.price))}` : 'Gốc'}
                     </div>
                   </label>
-                  
-                  {isSelected && hasDetails && (
-                    <div className={styles.shaftDetails}>
-                      {shaft.image && (
-                        <div className={styles.shaftImageContainer}>
-                          <img src={shaft.image} alt={shaft.name} className={styles.shaftImage} />
-                        </div>
-                      )}
-                      
-                      {shaft.description && (
-                        <details className={styles.shaftDetailsAccordion}>
-                          <summary>Chi tiết & Mô tả ngọn cơ</summary>
-                          <div className={styles.accordionContent}>
-                            {shaft.description.split('\n').map((line, i) => <p key={i}>{line}</p>)}
-                          </div>
-                        </details>
-                      )}
-                      
-                      {shaft.specs && (
-                        <details className={styles.shaftDetailsAccordion}>
-                          <summary>Thông số kỹ thuật</summary>
-                          <div className={styles.accordionContent}>
-                            {shaft.specs.split('\n').map((line, i) => <p key={i}>{line}</p>)}
-                          </div>
-                        </details>
-                      )}
-                    </div>
-                  )}
                 </div>
               );
             })}
