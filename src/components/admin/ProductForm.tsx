@@ -179,6 +179,29 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
       // 2. Lưu thông tin vào Table
       const validSpecs = specs.filter((s: any) => s.name.trim() !== '' && s.value.trim() !== '');
       const validShafts = shafts.filter((s: any) => s.name.trim() !== '');
+      
+      // Upload ảnh cho shafts
+      for (const shaft of validShafts) {
+        if (shaft.imageFile) {
+          const file = shaft.imageFile;
+          const fileExt = file.name.split('.').pop();
+          const fileName = `shaft-${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('product-images')
+            .upload(fileName, file);
+
+          if (!uploadError) {
+            const { data } = supabase.storage
+              .from('product-images')
+              .getPublicUrl(fileName);
+            shaft.image = data.publicUrl;
+          }
+        }
+        delete shaft.imageFile;
+        delete shaft.expanded;
+      }
+
       const validUpgrades = upgrades.filter((u: any) => u.name.trim() !== '');
       
       const productPayload = {
@@ -352,13 +375,42 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
         <label style={{ fontWeight: 'bold' }}>1. Tùy chọn Ngọn (Shafts)</label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
           {shafts.map((shaft, index) => (
-            <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <input type="text" className={styles.input} value={shaft.name} onChange={e => { const s = [...shafts]; s[index].name = e.target.value; setShafts(s); }} placeholder="Tên ngọn (VD: Ngọn mộc, Ngọn ghép 10)" style={{ flex: 2 }} />
-              <input type="number" className={styles.input} value={shaft.price} onChange={e => { const s = [...shafts]; s[index].price = parseInt(e.target.value) || 0; setShafts(s); }} placeholder="Giá cộng thêm (VD: 1500000)" style={{ flex: 1 }} />
-              <label style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px', flex: 1 }}>
-                <input type="radio" checked={shaft.isDefault} onChange={() => { const s = [...shafts].map(x => ({...x, isDefault: false})); s[index].isDefault = true; setShafts(s); }} /> Mặc định
-              </label>
-              <button type="button" onClick={() => setShafts(shafts.filter((_, i) => i !== index))} style={{ padding: '0 1rem', background: '#ff4d4f', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>X</button>
+            <div key={index} style={{ border: '1px solid rgba(150,150,150,0.2)', padding: '0.5rem', borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input type="text" className={styles.input} value={shaft.name} onChange={e => { const s = [...shafts]; s[index].name = e.target.value; setShafts(s); }} placeholder="Tên ngọn (VD: Ngọn mộc)" style={{ flex: 2 }} />
+                <input type="number" className={styles.input} value={shaft.price} onChange={e => { const s = [...shafts]; s[index].price = parseInt(e.target.value) || 0; setShafts(s); }} placeholder="Giá (VD: 1500000)" style={{ flex: 1 }} />
+                <label style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px', flex: 1 }}>
+                  <input type="radio" checked={shaft.isDefault} onChange={() => { const s = [...shafts].map(x => ({...x, isDefault: false})); s[index].isDefault = true; setShafts(s); }} /> Mặc định
+                </label>
+                <button type="button" onClick={() => { const s = [...shafts]; s[index].expanded = !s[index].expanded; setShafts(s); }} style={{ padding: '0.3rem 0.5rem', background: '#e6f7ff', color: '#0050b3', border: '1px solid #91d5ff', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }} title="Cài đặt chi tiết">⚙️</button>
+                <button type="button" onClick={() => setShafts(shafts.filter((_, i) => i !== index))} style={{ padding: '0.3rem 0.6rem', background: '#ff4d4f', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>X</button>
+              </div>
+              
+              {shaft.expanded && (
+                <div style={{ padding: '1rem', background: 'var(--color-bg-light)', borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: '0.8rem', border: '1px dashed rgba(150,150,150,0.4)' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Hình ảnh ngọn cơ (tùy chọn):</label>
+                  {(shaft.image || shaft.imageFile) ? (
+                     <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+                       <img src={shaft.imageFile ? URL.createObjectURL(shaft.imageFile) : shaft.image} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px', border: '1px solid #eee' }} alt="Shaft preview" />
+                       <button type="button" onClick={() => { const s = [...shafts]; s[index].image = ''; s[index].imageFile = null; setShafts(s); }} style={{ position: 'absolute', top: -5, right: -5, background: 'red', color: 'white', border: 'none', borderRadius: '50%', width: 24, height: 24, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>X</button>
+                     </div>
+                  ) : (
+                     <input type="file" accept="image/*" onChange={e => {
+                       if (e.target.files && e.target.files[0]) {
+                         const s = [...shafts];
+                         s[index].imageFile = e.target.files[0];
+                         setShafts(s);
+                       }
+                     }} />
+                  )}
+
+                  <label style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Mô tả ngọn cơ (tùy chọn):</label>
+                  <textarea className={styles.input} value={shaft.description || ''} onChange={e => { const s = [...shafts]; s[index].description = e.target.value; setShafts(s); }} placeholder="Nhập mô tả về chất liệu, độ đàn hồi, trợ lực..." style={{ minHeight: '80px', resize: 'vertical' }} />
+
+                  <label style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Thông số kỹ thuật (tùy chọn):</label>
+                  <textarea className={styles.input} value={shaft.specs || ''} onChange={e => { const s = [...shafts]; s[index].specs = e.target.value; setShafts(s); }} placeholder="Kích thước, loại phíp, loại tẩy (đầu cơ)..." style={{ minHeight: '80px', resize: 'vertical' }} />
+                </div>
+              )}
             </div>
           ))}
           

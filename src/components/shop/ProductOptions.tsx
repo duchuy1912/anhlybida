@@ -9,6 +9,9 @@ interface Shaft {
   name: string;
   price: number;
   isDefault?: boolean;
+  image?: string;
+  description?: string;
+  specs?: string;
 }
 
 interface Upgrade {
@@ -93,25 +96,57 @@ export default function ProductOptions({ basePrice, options, onTotalChange }: Pr
         <div className={styles.section}>
           <h4 className={styles.sectionTitle}>{t('shaftOptions')}</h4>
           <div className={styles.shaftsList}>
-            {options.shafts.map((shaft, idx) => (
-              <label 
-                key={idx} 
-                className={`${styles.shaftOption} ${selectedShaft?.name === shaft.name ? styles.selected : ''}`}
-              >
-                <div className={styles.shaftRadio}>
-                  <input 
-                    type="radio" 
-                    name="shaft" 
-                    checked={selectedShaft?.name === shaft.name}
-                    onChange={() => setSelectedShaft(shaft)}
-                  />
-                  <span>{shaft.name}</span>
+            {options.shafts.map((shaft, idx) => {
+              const isSelected = selectedShaft?.name === shaft.name;
+              const hasDetails = shaft.image || shaft.description || shaft.specs;
+              
+              return (
+                <div key={idx} className={`${styles.shaftOptionWrapper} ${isSelected ? styles.selectedWrapper : ''}`}>
+                  <label className={`${styles.shaftOption} ${isSelected ? styles.selected : ''}`}>
+                    <div className={styles.shaftRadio}>
+                      <input 
+                        type="radio" 
+                        name="shaft" 
+                        checked={isSelected}
+                        onChange={() => setSelectedShaft(shaft)}
+                      />
+                      <span>{shaft.name}</span>
+                    </div>
+                    <div className={styles.shaftPrice}>
+                      {shaft.price > 0 ? `+${formatPrice(shaft.price)}` : shaft.price < 0 ? `-${formatPrice(Math.abs(shaft.price))}` : 'Gốc'}
+                    </div>
+                  </label>
+                  
+                  {isSelected && hasDetails && (
+                    <div className={styles.shaftDetails}>
+                      {shaft.image && (
+                        <div className={styles.shaftImageContainer}>
+                          <img src={shaft.image} alt={shaft.name} className={styles.shaftImage} />
+                        </div>
+                      )}
+                      
+                      {shaft.description && (
+                        <details className={styles.shaftDetailsAccordion}>
+                          <summary>Chi tiết & Mô tả ngọn cơ</summary>
+                          <div className={styles.accordionContent}>
+                            {shaft.description.split('\n').map((line, i) => <p key={i}>{line}</p>)}
+                          </div>
+                        </details>
+                      )}
+                      
+                      {shaft.specs && (
+                        <details className={styles.shaftDetailsAccordion}>
+                          <summary>Thông số kỹ thuật</summary>
+                          <div className={styles.accordionContent}>
+                            {shaft.specs.split('\n').map((line, i) => <p key={i}>{line}</p>)}
+                          </div>
+                        </details>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <div className={styles.shaftPrice}>
-                  {shaft.price > 0 ? `+${formatPrice(shaft.price)}` : shaft.price < 0 ? `-${formatPrice(Math.abs(shaft.price))}` : 'Gốc'}
-                </div>
-              </label>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

@@ -49,16 +49,29 @@
   gap: 0.5rem;
 }
 
+.shaftOptionWrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  background: white;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.selectedWrapper {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
 .shaftOption, .upgradeOption {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
-  background: white;
+  background: transparent;
 }
 
 :global([data-theme='dark']) .shaftOption,
@@ -68,8 +81,62 @@
 }
 
 .shaftOption.selected {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent);
+  /* Only target inner styles if needed since wrapper has the border */
+}
+
+.shaftDetails {
+  padding: 0 15px 15px 15px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+:global([data-theme='dark']) .shaftDetails {
+  border-top-color: rgba(255,255,255,0.1);
+}
+
+.shaftImageContainer {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 5px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.shaftImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.shaftDetailsAccordion {
+  color: var(--color-text-main);
+}
+
+.shaftDetailsAccordion summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 5px 0;
+  user-select: none;
+  outline: none;
+  color: var(--color-accent);
+}
+
+.accordionContent {
+  padding: 10px;
+  background: rgba(0,0,0,0.02);
+  border-radius: 6px;
+  margin-top: 5px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+:global([data-theme='dark']) .accordionContent {
+  background: rgba(255,255,255,0.05);
 }
 
 .shaftRadio, .upgradeCheckbox {
