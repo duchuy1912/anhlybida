@@ -148,10 +148,12 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
 
       <div className={styles.shopLayout}>
         <aside className={`${styles.sidebar} ${isMobileFilterOpen ? styles.open : ''}`}>
-          <button className={styles.closeFilterBtnMobile} onClick={() => setIsMobileFilterOpen(false)}>×</button>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3 className={styles.filterTitle} style={{ margin: 0 }}>{t('filter')}</h3>
-          <button onClick={handleClearFilters} className={styles.clearFilterBtn}>✖ {t('clear')}</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+          <h3 className={styles.filterTitle} style={{ margin: 0, padding: 0, border: 'none' }}>{t('filter')}</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <button onClick={handleClearFilters} className={styles.clearFilterBtn} style={{ padding: '0.2rem 0.5rem' }}>✖ Xóa</button>
+            <button className={styles.closeFilterBtnMobile} onClick={() => setIsMobileFilterOpen(false)}>✕</button>
+          </div>
         </div>
 
         <div className={styles.filterGroup}>
