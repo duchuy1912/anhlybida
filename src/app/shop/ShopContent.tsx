@@ -20,6 +20,7 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
   
   const [activeCategory, setActiveCategory] = useState("all");
   const [categories, setCategories] = useState<any[]>([{ id: 'all', name: 'all', slug: 'all', filter: 'all' }]);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Lọc giá và màu sắc
   const [minPrice, setMinPrice] = useState(0);
@@ -111,9 +112,43 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
     setSelectedColor(null);
   };
 
+  // Vô hiệu hóa cuộn khi mở bộ lọc trên mobile
+  useEffect(() => {
+    if (isMobileFilterOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isMobileFilterOpen]);
+
   return (
-    <div className={styles.shopLayout}>
-      <aside className={styles.sidebar}>
+    <>
+      <div className={styles.mobileFilterToggleContainer}>
+        <button 
+          className={styles.mobileFilterBtn} 
+          onClick={() => setIsMobileFilterOpen(true)}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+          Bộ lọc {((activeCategory !== 'all' ? 1 : 0) + (selectedColor ? 1 : 0) + (minPrice > 0 || maxPrice < 50000000 ? 1 : 0)) > 0 && `(${((activeCategory !== 'all' ? 1 : 0) + (selectedColor ? 1 : 0) + (minPrice > 0 || maxPrice < 50000000 ? 1 : 0))})`}
+        </button>
+      </div>
+
+      <div className={`${styles.overlay} ${isMobileFilterOpen ? styles.open : ''}`} onClick={() => setIsMobileFilterOpen(false)}></div>
+
+      <div className={styles.shopLayout}>
+        <aside className={`${styles.sidebar} ${isMobileFilterOpen ? styles.open : ''}`}>
+          <button className={styles.closeFilterBtnMobile} onClick={() => setIsMobileFilterOpen(false)}>×</button>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <h3 className={styles.filterTitle} style={{ margin: 0 }}>{t('filter')}</h3>
           <button onClick={handleClearFilters} className={styles.clearFilterBtn}>✖ {t('clear')}</button>
@@ -216,5 +251,6 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
         )}
       </div>
     </div>
+    </>
   );
 }
