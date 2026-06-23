@@ -175,13 +175,35 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
         <div className={styles.filterGroup}>
           <h4 className={styles.filterSubtitle}>{t('price')}</h4>
           <div className={styles.priceFilter}>
-            <input 
-              type="range" 
-              min="0" max="50000000" step="500000"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-              className={styles.priceSlider}
-            />
+            <div className={styles.dualRangeSlider}>
+              <div 
+                className={styles.rangeTrack}
+                style={{
+                  left: `${(minPrice / 50000000) * 100}%`,
+                  width: `${((maxPrice - minPrice) / 50000000) * 100}%`
+                }}
+              ></div>
+              <input 
+                type="range" 
+                min="0" max="50000000" step="500000"
+                value={minPrice}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  if (val <= maxPrice) setMinPrice(val);
+                }}
+                className={`${styles.priceSlider} ${styles.minSlider}`}
+              />
+              <input 
+                type="range" 
+                min="0" max="50000000" step="500000"
+                value={maxPrice}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  if (val >= minPrice) setMaxPrice(val);
+                }}
+                className={`${styles.priceSlider} ${styles.maxSlider}`}
+              />
+            </div>
             <div className={styles.priceInputs}>
               <div className={styles.priceInputWrapper}>
                 <input 
