@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import imageCompression from 'browser-image-compression';
 import styles from './ProductForm.module.css';
 
 interface ProductFormProps {
@@ -183,13 +184,25 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
       // 1. Upload ảnh lên Storage
       const uploadedUrls: string[] = [];
       for (const file of images) {
-        const fileExt = file.name.split('.').pop();
+        let fileToUpload = file;
+        try {
+          const options = {
+            maxSizeMB: 0.3,
+            maxWidthOrHeight: 1024,
+            useWebWorker: true,
+          };
+          fileToUpload = await imageCompression(file, options);
+        } catch (error) {
+          console.error("Lỗi nén ảnh sản phẩm:", error);
+        }
+
+        const fileExt = fileToUpload.name.split('.').pop() || 'jpg';
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
         const filePath = `${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('product-images')
-          .upload(filePath, file);
+          .upload(filePath, fileToUpload);
 
         if (uploadError) throw uploadError;
 
@@ -213,13 +226,24 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
         let hasNewDetails = false;
         
         if (shaft.imageFile) {
-          const file = shaft.imageFile;
-          const fileExt = file.name.split('.').pop();
+          let fileToUpload = shaft.imageFile;
+          try {
+            const options = {
+              maxSizeMB: 0.3,
+              maxWidthOrHeight: 800, // Ảnh ngọn cơ nhỏ hơn một chút
+              useWebWorker: true,
+            };
+            fileToUpload = await imageCompression(shaft.imageFile, options);
+          } catch (error) {
+            console.error("Lỗi nén ảnh ngọn cơ:", error);
+          }
+
+          const fileExt = fileToUpload.name.split('.').pop() || 'jpg';
           const fileName = `shaft-${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
           
           const { error: uploadError } = await supabase.storage
             .from('product-images')
-            .upload(fileName, file);
+            .upload(fileName, fileToUpload);
 
           if (!uploadError) {
             const { data } = supabase.storage

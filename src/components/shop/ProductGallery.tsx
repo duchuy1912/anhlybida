@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { ZoomIn, ZoomOut, X, Maximize2 } from 'lucide-react';
 import styles from './ProductGallery.module.css';
 
@@ -33,7 +34,14 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
     <>
       <div className={styles.galleryContainer}>
         <div className={styles.mainImageWrapper} onClick={() => setIsLightboxOpen(true)}>
-          <img src={mainImage} alt={productName} className={styles.mainImage} />
+          <Image 
+            src={mainImage} 
+            alt={productName} 
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className={styles.mainImage} 
+            style={{ objectFit: 'contain' }}
+          />
           <button className={styles.expandBtn}><Maximize2 size={20} /></button>
         </div>
         
@@ -45,7 +53,14 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
                 className={`${styles.thumbnailWrapper} ${mainImage === img ? styles.activeThumbnail : ''}`}
                 onClick={() => setMainImage(img)}
               >
-                <img src={img} alt={`${productName} thumbnail ${index + 1}`} className={styles.thumbnail} />
+                <Image 
+                  src={img} 
+                  alt={`${productName} thumbnail ${index + 1}`} 
+                  fill
+                  sizes="100px"
+                  className={styles.thumbnail} 
+                  style={{ objectFit: 'cover' }}
+                />
               </div>
             ))}
           </div>
@@ -59,12 +74,18 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
             <button onClick={handleZoomOut} className={styles.lightboxBtn} title="Thu nhỏ"><ZoomOut size={24} /></button>
             <button onClick={closeLightbox} className={styles.lightboxBtn} title="Đóng"><X size={24} /></button>
           </div>
-          <div className={styles.lightboxContent} onClick={e => e.stopPropagation()}>
-            <img 
+          <div 
+            className={styles.lightboxContent}
+            onClick={e => e.stopPropagation()}
+            style={{ transform: `scale(${zoomLevel})` }}
+          >
+            <Image 
               src={mainImage} 
               alt={productName} 
+              fill
               className={styles.lightboxImage} 
-              style={{ transform: `scale(${zoomLevel})` }}
+              style={{ objectFit: 'contain' }}
+              unoptimized={zoomLevel > 1}
             />
           </div>
         </div>

@@ -5,6 +5,7 @@ import ProductOptions from '@/components/shop/ProductOptions';
 import AddToCartButton from '@/components/shop/AddToCartButton';
 import { useCurrency } from '@/context/CurrencyContext';
 import { useLanguage } from '@/context/LanguageContext';
+import Image from 'next/image';
 import styles from './page.module.css';
 
 interface ProductOrderFormProps {
@@ -43,8 +44,14 @@ export default function ProductOrderForm({ product, globalShafts = {} }: Product
           <h4 style={{ margin: '0 0 10px 0', fontSize: '1rem', color: 'var(--color-accent)' }}>Thông tin ngọn cơ: {activeShaftDetails.name || selectedOptions?.shaft?.name}</h4>
           
           {activeShaftDetails.image && (
-            <div style={{ width: '100%', borderRadius: '6px', overflow: 'hidden', marginBottom: '10px', border: '1px solid rgba(0,0,0,0.05)' }}>
-              <img src={activeShaftDetails.image} alt="Shaft" style={{ width: '100%', height: 'auto', display: 'block' }} />
+            <div style={{ position: 'relative', width: '100%', height: '200px', marginBottom: '10px', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)' }}>
+              <Image 
+                src={activeShaftDetails.image} 
+                alt="Shaft" 
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                style={{ objectFit: 'contain' }} 
+              />
             </div>
           )}
           

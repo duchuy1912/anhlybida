@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
@@ -21,7 +22,14 @@ export default function ProductCard({ id, name, category, price, imageUrl, image
   return (
     <Link href={`/shop/${id}`} className={styles.card}>
       <div className={styles.imageWrapper}>
-        <img src={displayImage} alt={name} className={styles.image} />
+        <Image 
+          src={displayImage} 
+          alt={name} 
+          fill
+          sizes="(max-width: 768px) 50vw, 30vw"
+          className={styles.image} 
+          style={{ objectFit: 'cover' }}
+        />
       </div>
       <div className={styles.info}>
         <span className={styles.category}>{category}</span>
