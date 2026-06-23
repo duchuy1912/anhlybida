@@ -207,9 +207,12 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
             <div className={styles.priceInputs}>
               <div className={styles.priceInputWrapper}>
                 <input 
-                  type="number" 
-                  value={minPrice} 
-                  onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)} 
+                  type="text" 
+                  value={minPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} 
+                  onChange={(e) => {
+                    const parsed = parseInt(e.target.value.replace(/[^\d]/g, ''), 10);
+                    setMinPrice(isNaN(parsed) ? 0 : parsed);
+                  }}
                   className={styles.priceInput}
                 />
                 <span>đ</span>
@@ -217,9 +220,12 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
               <span className={styles.priceSeparator}>-</span>
               <div className={styles.priceInputWrapper}>
                 <input 
-                  type="number" 
-                  value={maxPrice} 
-                  onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)} 
+                  type="text" 
+                  value={maxPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} 
+                  onChange={(e) => {
+                    const parsed = parseInt(e.target.value.replace(/[^\d]/g, ''), 10);
+                    setMaxPrice(isNaN(parsed) ? 0 : parsed);
+                  }}
                   className={styles.priceInput}
                 />
                 <span>đ</span>
