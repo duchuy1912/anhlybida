@@ -1,3 +1,4 @@
+// Build: 2026-06-26 force-rebuild
 import type { Metadata } from "next";
 import { Outfit, Montserrat, Great_Vibes } from "next/font/google";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
