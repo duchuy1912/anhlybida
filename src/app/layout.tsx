@@ -23,6 +23,13 @@ const greatVibes = Great_Vibes({
 export const metadata: Metadata = {
   title: "Bida Anh Lý",
   description: "Cửa hàng bán cơ bida và phụ kiện bida uy tín, chất lượng.",
+  openGraph: {
+    title: "Bida Anh Lý",
+    description: "Cửa hàng bán cơ bida và phụ kiện bida uy tín, chất lượng.",
+    siteName: "Bida Anh Lý",
+    locale: "vi_VN",
+    type: "website",
+  },
   appleWebApp: {
     capable: true,
     title: "Bida Anh Lý",
