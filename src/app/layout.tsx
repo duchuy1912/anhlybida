@@ -21,7 +21,7 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Bida Anh Lý - Cơ Bida Đẳng Cấp",
+  title: "Bida Anh Lý",
   description: "Cửa hàng bán cơ bida và phụ kiện bida uy tín, chất lượng.",
   appleWebApp: {
     capable: true,
