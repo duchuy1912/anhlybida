@@ -297,7 +297,16 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
       if (initialData?.id) {
         // Edit mode
         
-        // 3. Dọn rác ảnh (Storage Leak Cleanup)
+        // 1. Cập nhật Database trước tiên!
+        const { error: updateError } = await supabase
+          .from('products')
+          .update(productPayload)
+          .eq('id', initialData.id);
+
+        if (updateError) throw updateError;
+        
+        // 2. Database đã cập nhật thành công, bây giờ mới dọn rác ảnh cũ (Storage Leak Cleanup)
+        // Nếu việc dọn rác thất bại, ít ra sản phẩm vẫn có ảnh đúng trong Database!
         const deletedImages = initialData.images?.filter((oldUrl: string) => !existingImages.includes(oldUrl)) || [];
         if (deletedImages.length > 0) {
           const filesToRemove = deletedImages.map((url: string) => {
@@ -306,16 +315,11 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
           }).filter(Boolean) as string[];
           
           if (filesToRemove.length > 0) {
-            await supabase.storage.from('product-images').remove(filesToRemove);
+            // Không throw error nếu xóa thất bại, để không ảnh hưởng đến luồng chính
+            await supabase.storage.from('product-images').remove(filesToRemove).catch(e => console.error("Lỗi xóa ảnh cũ:", e));
           }
         }
 
-        const { error: updateError } = await supabase
-          .from('products')
-          .update(productPayload)
-          .eq('id', initialData.id);
-
-        if (updateError) throw updateError;
         showToast('Đã cập nhật sản phẩm thành công!', 'success');
         setTimeout(() => router.push('/admin/products'), 1000);
       } else {
