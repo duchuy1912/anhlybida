@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Outfit, Montserrat, Great_Vibes } from "next/font/google";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { Providers } from "@/context/Providers";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -53,6 +54,7 @@ export default function RootLayout({
             {children}
           </ConditionalLayout>
         </Providers>
+        {process.env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
       </body>
     </html>
   );
