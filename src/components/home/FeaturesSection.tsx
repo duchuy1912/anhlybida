@@ -62,8 +62,8 @@ export default function FeaturesSection() {
           <h2 className={styles.title}>{isEn ? "WELCOME TO ANHLY BILLIARDS!" : "CHÀO MỪNG BẠN ĐẾN VỚI CƠ BIDA ANHLY!"}</h2>
           <p className={styles.description}>
             {isEn 
-              ? "Specializing in the production of high-quality professional billiard cues, providing the best cue warranty service for players. In the journey to become a leading high-quality billiard cue brand in Vietnam, continuous improvement, research and practice is the guideline we aim for every day."
-              : "Chuyên sản xuất dòng cơ bida chuyên nghiệp chất lượng cao, cung cấp dịch vụ bảo hành cơ tốt nhất cho cơ thủ. Trong hành trình phát triển để trở thành thương hiệu sản xuất cơ bida chất lượng cao hàng đầu Việt Nam, không ngừng cải tiến, nghiên cứu và thực nghiệm là kim chỉ nam mà chúng tôi hướng đến hàng ngày."
+              ? "With a deep passion for Billiards, AnhLy Billiards is proud to craft and distribute high-end, uniquely personalized cues. We are committed to delivering products of flawless craftsmanship along with professional after-sales service, accompanying players on their journey to conquer every peak."
+              : "Với niềm đam mê mãnh liệt dành cho bộ môn Billiards, Cơ Bida LÝ tự hào là đơn vị chế tác và phân phối các dòng cơ bida cao cấp, mang đậm dấu ấn cá nhân. Chúng tôi cam kết mang đến những sản phẩm đạt độ tinh xảo hoàn mỹ cùng dịch vụ hậu mãi chuyên nghiệp, đồng hành cùng các cơ thủ trên chặng đường chinh phục đỉnh cao."
             }
           </p>
           <div className={styles.socials}>
