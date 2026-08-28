@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { uploadImageToCloudinary } from '@/utils/upload';
 import { Trash2, Plus, Image as ImageIcon, Link as LinkIcon, Type } from 'lucide-react';
 
 export default function AdminBanners() {
@@ -51,26 +52,14 @@ export default function AdminBanners() {
 
     setUploading(true);
     try {
-      // 1. Upload ảnh
-      const fileExt = newBanner.file.name.split('.').pop();
-      const fileName = `banner-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(filePath, newBanner.file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: publicUrlData } = supabase.storage
-        .from('product-images')
-        .getPublicUrl(filePath);
+      // 1. Upload ảnh lên Cloudinary
+      const url = await uploadImageToCloudinary(newBanner.file);
 
       // 2. Lưu vào DB
       const { data, error } = await supabase
         .from('banners')
         .insert({
-          image_url: publicUrlData.publicUrl,
+          image_url: url,
           title: newBanner.title,
           subtitle: newBanner.subtitle,
           link: newBanner.link,

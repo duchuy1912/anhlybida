@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import imageCompression from 'browser-image-compression';
+import { uploadImageToCloudinary } from '@/utils/upload';
 import styles from './ProductForm.module.css';
 
 interface ProductFormProps {
@@ -195,22 +196,12 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
         } catch (error) {
           console.error("Lỗi nén ảnh sản phẩm:", error);
         }
-
-        const fileExt = fileToUpload.name.split('.').pop() || 'jpg';
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('product-images')
-          .upload(filePath, fileToUpload);
-
-        if (uploadError) throw uploadError;
-
-        const { data } = supabase.storage
-          .from('product-images')
-          .getPublicUrl(filePath);
-        
-        uploadedUrls.push(data.publicUrl);
+        try {
+          const url = await uploadImageToCloudinary(fileToUpload);
+          uploadedUrls.push(url);
+        } catch (uploadError) {
+          throw uploadError;
+        }
       }
 
       // 2. Lưu thông tin vào Table
@@ -238,19 +229,12 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
             console.error("Lỗi nén ảnh ngọn cơ:", error);
           }
 
-          const fileExt = fileToUpload.name.split('.').pop() || 'jpg';
-          const fileName = `shaft-${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-          
-          const { error: uploadError } = await supabase.storage
-            .from('product-images')
-            .upload(fileName, fileToUpload);
-
-          if (!uploadError) {
-            const { data } = supabase.storage
-              .from('product-images')
-              .getPublicUrl(fileName);
-            shaft.image = data.publicUrl;
+          try {
+            const url = await uploadImageToCloudinary(fileToUpload);
+            shaft.image = url;
             hasNewDetails = true;
+          } catch (uploadError) {
+            console.error("Lỗi upload ảnh ngọn cơ:", uploadError);
           }
         }
         
@@ -305,20 +289,7 @@ export default function ProductForm({ initialData }: ProductFormProps = {}) {
 
         if (updateError) throw updateError;
         
-        // 2. Database đã cập nhật thành công, bây giờ mới dọn rác ảnh cũ (Storage Leak Cleanup)
-        // Nếu việc dọn rác thất bại, ít ra sản phẩm vẫn có ảnh đúng trong Database!
-        const deletedImages = initialData.images?.filter((oldUrl: string) => !existingImages.includes(oldUrl)) || [];
-        if (deletedImages.length > 0) {
-          const filesToRemove = deletedImages.map((url: string) => {
-            const parts = url.split('/');
-            return parts.pop();
-          }).filter(Boolean) as string[];
-          
-          if (filesToRemove.length > 0) {
-            // Không throw error nếu xóa thất bại, để không ảnh hưởng đến luồng chính
-            await supabase.storage.from('product-images').remove(filesToRemove).catch(e => console.error("Lỗi xóa ảnh cũ:", e));
-          }
-        }
+        // Không cần xóa ảnh cũ khỏi Supabase vì ảnh sẽ được lưu trên Cloudinary
 
         showToast('Đã cập nhật sản phẩm thành công!', 'success');
         setTimeout(() => router.push('/admin/products'), 1000);

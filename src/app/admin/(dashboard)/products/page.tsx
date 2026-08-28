@@ -71,16 +71,7 @@ export default function AdminProducts() {
       onConfirm: async () => {
         const productToDelete = products.find(p => p.id === id);
         
-        if (productToDelete?.images?.length > 0) {
-          const filesToRemove = productToDelete.images.map((url: string) => {
-            const parts = url.split('/');
-            return parts.pop();
-          }).filter(Boolean) as string[];
-          
-          if (filesToRemove.length > 0) {
-            await supabase.storage.from('product-images').remove(filesToRemove);
-          }
-        }
+        // Không cần xóa ảnh từ Storage nữa vì dùng Cloudinary
 
         const { error } = await supabase
           .from('products')
