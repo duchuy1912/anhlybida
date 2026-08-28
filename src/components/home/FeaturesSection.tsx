@@ -61,7 +61,7 @@ export default function FeaturesSection() {
         <div className={styles.intro}>
           <h2 className={styles.title}>{isEn ? "WELCOME TO ANHLY BILLIARDS!" : "CHÀO MỪNG BẠN ĐẾN VỚI CƠ BIDA ANHLY!"}</h2>
           <p className={styles.description}>
-            {isEn 
+                        {isEn 
               ? "With a deep passion for Billiards, AnhLy Billiards is proud to craft and distribute high-end, uniquely personalized cues. We are committed to delivering products of flawless craftsmanship along with professional after-sales service, accompanying players on their journey to conquer every peak."
               : "Với niềm đam mê mãnh liệt dành cho bộ môn Billiards, Cơ Bida LÝ tự hào là đơn vị chế tác và phân phối các dòng cơ bida cao cấp, mang đậm dấu ấn cá nhân. Chúng tôi cam kết mang đến những sản phẩm đạt độ tinh xảo hoàn mỹ cùng dịch vụ hậu mãi chuyên nghiệp, đồng hành cùng các cơ thủ trên chặng đường chinh phục đỉnh cao."
             }
