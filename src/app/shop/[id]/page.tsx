@@ -65,7 +65,7 @@ export default async function ProductDetailPage({ params }: Props) {
     currency: 'VND',
   }).format(product.price);
 
-  const productImages = product.images && product.images.length > 0 ? product.images : ['/images/cue_1.png'];
+  const productImages = product.images && product.images.length > 0 ? product.images : [];
 
   return (
     <main className={`container ${styles.productPage}`}>

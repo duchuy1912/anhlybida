@@ -27,8 +27,8 @@ export default function ProductOrderForm({ product, globalShafts = {} }: Product
   const [totalPrice, setTotalPrice] = useState(product.price);
   const [selectedOptions, setSelectedOptions] = useState<any>(null);
 
-  const productImages = product.images && product.images.length > 0 ? product.images : ['/images/cue_1.png'];
-
+  const productImages = product.images && product.images.length > 0 ? product.images : [];
+  
   const isOldSpecsFormat = Array.isArray(product.specs);
   const options = React.useMemo(() => isOldSpecsFormat ? {} : (product.specs || {}), [isOldSpecsFormat, product.specs]);
 
@@ -92,7 +92,7 @@ export default function ProductOrderForm({ product, globalShafts = {} }: Product
             id: product.id,
             name: product.name,
             price: totalPrice,
-            image: productImages[0],
+            image: productImages.length > 0 ? productImages[0] : '',
             category: product.category,
             selectedOptions: selectedOptions
           }} 

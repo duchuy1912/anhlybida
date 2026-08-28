@@ -17,19 +17,26 @@ export default function ProductCard({ id, name, category, price, imageUrl, image
     currency: 'VND',
   }).format(price);
 
-  const displayImage = images && images.length > 0 ? images[0] : (imageUrl || '/images/cue_1.png');
+  const hasImage = images && images.length > 0;
+  const displayImage = hasImage ? images[0] : null;
 
   return (
     <Link href={`/shop/${id}`} className={styles.card}>
       <div className={styles.imageWrapper}>
-        <Image 
-          src={displayImage} 
-          alt={name} 
-          fill
-          sizes="(max-width: 768px) 50vw, 30vw"
-          className={styles.image} 
-          style={{ objectFit: 'cover' }}
-        />
+        {hasImage ? (
+          <Image 
+            src={displayImage!} 
+            alt={name} 
+            fill
+            sizes="(max-width: 768px) 50vw, 30vw"
+            className={styles.image} 
+            style={{ objectFit: 'cover' }}
+          />
+        ) : (
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', color: '#999', fontSize: '0.9rem', textAlign: 'center', padding: '1rem' }}>
+            Chưa có hình ảnh
+          </div>
+        )}
       </div>
       <div className={styles.info}>
         <span className={styles.category}>{category}</span>
