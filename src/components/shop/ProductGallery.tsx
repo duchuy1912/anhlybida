@@ -11,8 +11,7 @@ interface ProductGalleryProps {
 }
 
 export default function ProductGallery({ images, productName }: ProductGalleryProps) {
-  const hasImages = images && images.length > 0;
-  const [mainImage, setMainImage] = useState(hasImages ? images[0] : '');
+  const [mainImage, setMainImage] = useState(images[0]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
 
@@ -30,20 +29,6 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
     setIsLightboxOpen(false);
     setZoomLevel(1);
   };
-
-  if (!hasImages) {
-    return (
-      <div className={styles.galleryContainer}>
-        <div className={styles.mainImageWrapper} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', color: '#999', flexDirection: 'column', padding: '2rem', textAlign: 'center' }}>
-          <div style={{ marginBottom: '1rem', opacity: 0.3 }}>
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-          </div>
-          <h3>Chưa có hình ảnh</h3>
-          <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>Hình ảnh sản phẩm đang được cập nhật</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

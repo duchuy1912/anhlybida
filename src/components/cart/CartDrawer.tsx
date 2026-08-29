@@ -43,11 +43,7 @@ export default function CartDrawer() {
             <div className={styles.itemsList}>
               {items.map(item => (
                 <div key={item.cartItemId || item.id} className={styles.cartItem}>
-                  {item.image ? (
-                    <img src={item.image} alt={item.name} className={styles.itemImage} />
-                  ) : (
-                    <div className={styles.itemImage} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#eee', color: '#999', fontSize: '10px', textAlign: 'center' }}>Chưa có ảnh</div>
-                  )}
+                  <img src={item.image} alt={item.name} className={styles.itemImage} />
                   <div className={styles.itemDetails}>
                     <div>
                       <div className={styles.itemHeader}>

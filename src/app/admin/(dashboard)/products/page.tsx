@@ -71,7 +71,16 @@ export default function AdminProducts() {
       onConfirm: async () => {
         const productToDelete = products.find(p => p.id === id);
         
-        // Không cần xóa ảnh từ Storage nữa vì dùng Cloudinary
+        if (productToDelete?.images?.length > 0) {
+          const filesToRemove = productToDelete.images.map((url: string) => {
+            const parts = url.split('/');
+            return parts.pop();
+          }).filter(Boolean) as string[];
+          
+          if (filesToRemove.length > 0) {
+            await supabase.storage.from('product-images').remove(filesToRemove);
+          }
+        }
 
         const { error } = await supabase
           .from('products')
@@ -168,18 +177,13 @@ export default function AdminProducts() {
         <>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
             {paginatedProducts.map(product => {
-            const hasImage = product.images && product.images.length > 0;
-            const displayImage = hasImage ? product.images[0] : null;
+            const displayImage = product.images?.[0] || '/images/cue_1.png';
             const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price);
             
             return (
               <div key={product.id} style={{ backgroundColor: 'var(--color-bg-light)', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', position: 'relative' }}>
-                <div style={{ position: 'relative', paddingTop: '100%', background: '#eee' }}>
-                  {hasImage ? (
-                    <img src={displayImage} alt={product.name} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: '0.8rem', textAlign: 'center' }}>Chưa có<br/>hình ảnh</div>
-                  )}
+                <div style={{ position: 'relative', paddingTop: '100%' }}>
+                  <img src={displayImage} alt={product.name} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                   <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '0.5rem' }}>
                     <Link 
                       href={`/admin/edit/${product.id}`}

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { uploadImageToCloudinary } from '@/utils/upload';
 
 export default function AdminAboutPage() {
   const [content, setContent] = useState('');
@@ -57,8 +56,13 @@ export default function AdminAboutPage() {
   const uploadImageFile = async (file: File) => {
     try {
       setSaving(true);
-      const url = await uploadImageToCloudinary(file);
-      return url;
+      const fileExt = file.name.split('.').pop() || 'png';
+      const fileName = `about-${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const { error } = await supabase.storage.from('product-images').upload(fileName, file);
+      if (error) throw error;
+      
+      const { data } = supabase.storage.from('product-images').getPublicUrl(fileName);
+      return data.publicUrl;
     } catch (err: any) {
       showToast('Lỗi tải ảnh: ' + err.message, 'error');
       return null;
