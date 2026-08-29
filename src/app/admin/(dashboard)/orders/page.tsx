@@ -89,6 +89,16 @@ export default function AdminOrders() {
     }
   };
 
+  const deleteOrder = async (id: string) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa đơn hàng này vĩnh viễn không?')) return;
+    const { error } = await supabase.from('orders').delete().eq('id', id);
+    if (error) {
+      alert('Lỗi xóa đơn hàng: ' + error.message);
+    } else {
+      setOrders(orders.filter(o => o.id !== id));
+    }
+  };
+
   if (loading) return <div>Đang tải danh sách đơn hàng...</div>;
 
   const activeOrders = orders.filter(o => ['pending', 'processing', 'shipping'].includes(o.status));
@@ -176,6 +186,12 @@ export default function AdminOrders() {
                     <span style={{ backgroundColor: getStatusColor(order.status), color: 'white', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold' }}>
                       {order.status.toUpperCase()}
                     </span>
+                    <button 
+                      onClick={() => deleteOrder(order.id)}
+                      style={{ backgroundColor: '#ff4d4f', color: 'white', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', marginLeft: '10px' }}
+                    >
+                      Xóa
+                    </button>
                   </div>
                   <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
                     Ngày đặt: {new Date(order.created_at).toLocaleString('vi-VN')}
