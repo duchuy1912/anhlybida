@@ -3,7 +3,7 @@ import ShopContent from './ShopContent';
 import styles from './page.module.css';
 import { supabase } from '@/lib/supabaseClient';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function ShopPage() {
   const { data: products } = await supabase

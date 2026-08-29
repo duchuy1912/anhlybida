@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingContact from "@/components/layout/FloatingContact";
+import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
 
 export default function ConditionalLayout({
   children,
@@ -14,7 +15,7 @@ export default function ConditionalLayout({
   const isAdmin = pathname?.startsWith("/admin");
 
   return (
-    <>
+    <SiteSettingsProvider>
       {!isAdmin && <Navbar />}
       {children}
       {!isAdmin && (
@@ -23,6 +24,6 @@ export default function ConditionalLayout({
           <Footer />
         </>
       )}
-    </>
+    </SiteSettingsProvider>
   );
 }

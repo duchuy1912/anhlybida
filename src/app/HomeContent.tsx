@@ -8,7 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import styles from "./page.module.css";
 
 
-export default function HomeContent({ allProducts, categories = [] }: { allProducts: any[], categories?: any[] }) {
+export default function HomeContent({ allProducts, categories = [], banners = [] }: { allProducts: any[], categories?: any[], banners?: any[] }) {
   const { t } = useLanguage();
 
   // If DB categories are available, use them, otherwise fallback to extracting from products
@@ -22,7 +22,7 @@ export default function HomeContent({ allProducts, categories = [] }: { allProdu
 
   return (
     <main>
-      <HeroSection />
+      <HeroSection initialBanners={banners} />
       <FeaturesSection />
       <div className="container" style={{ padding: '5rem 1rem' }}>
         {activeCategories.map((category) => {

@@ -5,6 +5,7 @@ import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
 import styles from './checkout.module.css';
 
@@ -240,7 +241,7 @@ ${itemsListText}`;
             {items.map(item => (
               <div key={item.cartItemId || item.id} className={styles.summaryItem}>
                 <div className={styles.itemInfo}>
-                  <img src={item.image} alt={item.name} className={styles.itemImage} />
+                  <Image src={item.image} alt={item.name} width={50} height={50} className={styles.itemImage} style={{ objectFit: 'cover' }} />
                   <div>
                     <div className={styles.itemName}>
                       {item.name} {item.category && <span style={{fontSize: '0.85em', color: '#666'}}>({item.category})</span>}

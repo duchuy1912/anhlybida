@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { Search, ShoppingCart, Moon, Sun, Menu, X, Home, Headphones, Download } from 'lucide-react';
@@ -8,6 +9,7 @@ import { useCart } from '@/context/CartContext';
 import { useTheme } from 'next-themes';
 import { useLanguage } from '@/context/LanguageContext';
 import { useCurrency } from '@/context/CurrencyContext';
+import { useSiteSettings } from '@/context/SiteSettingsContext';
 import { removeVietnameseTones } from '@/utils/string';
 import ContactPopup from '@/components/shop/ContactPopup';
 import styles from './Navbar.module.css';
@@ -24,11 +26,11 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const { currency, setCurrency, formatPrice } = useCurrency();
+  const { contactInfo } = useSiteSettings();
   
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-  const [contactInfo, setContactInfo] = useState<any>({});
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   
   // Trạng thái theo dõi cuộn trang
@@ -73,22 +75,13 @@ export default function Navbar() {
     setMounted(true);
     const fetchInitialData = async () => {
       const { supabase } = await import('@/lib/supabaseClient');
-      const [catsRes, prodsRes, contactRes] = await Promise.all([
+      const [catsRes, prodsRes] = await Promise.all([
         supabase.from('categories').select('*').order('name'),
-        supabase.from('products').select('id, name, price, images, category'),
-        supabase.from('site_settings').select('value').eq('key', 'contact_info').single()
+        supabase.from('products').select('id, name, price, images, category')
       ]);
       
       if (catsRes.data) setCategories(catsRes.data);
       if (prodsRes.data) setAllProducts(prodsRes.data);
-      if (contactRes.data && contactRes.data.value) {
-        try {
-          const parsed = typeof contactRes.data.value === 'string' ? JSON.parse(contactRes.data.value) : contactRes.data.value;
-          setContactInfo(parsed);
-        } catch (e) {
-          console.error(e);
-        }
-      }
     };
     fetchInitialData();
   }, []);
@@ -196,9 +189,12 @@ export default function Navbar() {
                       className={styles.searchResultItem}
                       onClick={() => { setIsSearchFocused(false); setIsMobileSearchOpen(false); }}
                     >
-                      <img 
+                      <Image 
                         src={product.images && product.images.length > 0 ? product.images[0] : '/placeholder.jpg'} 
                         alt={product.name} 
+                        width={40}
+                        height={40}
+                        style={{ objectFit: 'cover' }}
                         className={styles.searchResultImage} 
                       />
                       <div className={styles.searchResultInfo}>

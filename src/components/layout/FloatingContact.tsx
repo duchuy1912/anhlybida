@@ -1,36 +1,24 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import styles from './FloatingContact.module.css';
-import { Phone } from 'lucide-react';
-import { supabase } from '@/lib/supabaseClient';
+import { useState, useEffect } from "react";
+import styles from "./FloatingContact.module.css";
+import { Phone } from "lucide-react";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 export default function FloatingContact() {
   const [mounted, setMounted] = useState(false);
-  const [contactInfo, setContactInfo] = useState<any>({});
+  const { contactInfo } = useSiteSettings();
 
   useEffect(() => {
     setMounted(true);
-    const fetchContact = async () => {
-      const { data } = await supabase.from('site_settings').select('value').eq('key', 'contact_info').single();
-      if (data && data.value) {
-        try {
-          const parsed = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-          setContactInfo(parsed);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    };
-    fetchContact();
   }, []);
 
   if (!mounted) return null;
 
-  const phone = contactInfo.phone || '0367755966';
-  const formattedPhone = phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
-  const zaloUrl = contactInfo.zalo || (phone ? `https://zalo.me/${phone.replace(/\D/g, '')}` : 'https://zalo.me/0367755966');
-  const facebookUrl = contactInfo.facebook || 'https://m.me/Anhlyreviewt';
+  const phone = contactInfo?.phone || "0367755966";
+  const formattedPhone = phone.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3");
+  const zaloUrl = contactInfo?.zalo || (phone ? `https://zalo.me/${phone.replace(/\D/g, "")}` : "https://zalo.me/0367755966");
+  const facebookUrl = contactInfo?.facebook || "https://m.me/Anhlyreviewt";
 
   return (
     <div className={styles.container}>
@@ -56,13 +44,13 @@ export default function FloatingContact() {
         <span className={styles.tooltip}>Messenger</span>
       </a>
 
-      <a href={`tel:${phone.replace(/\D/g, '')}`} className={styles.callBtn} aria-label="Gọi điện">
+      <a href={`tel:${phone.replace(/\D/g, "")}`} className={styles.callBtn} aria-label="G?i �i?n">
         <div className={styles.callIconWrapper}>
           <Phone className={styles.callIcon} size={20} />
           <div className={styles.pulseRing}></div>
         </div>
         <div className={styles.callText}>
-          <span className={styles.callLabel}>Gọi miễn phí</span>
+          <span className={styles.callLabel}>G?i mi?n ph�</span>
           <strong className={styles.callNumber}>{formattedPhone}</strong>
         </div>
       </a>

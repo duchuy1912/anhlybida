@@ -3,6 +3,7 @@
 import { useCart } from '@/context/CartContext';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
 import styles from './CartDrawer.module.css';
 
@@ -43,7 +44,7 @@ export default function CartDrawer() {
             <div className={styles.itemsList}>
               {items.map(item => (
                 <div key={item.cartItemId || item.id} className={styles.cartItem}>
-                  <img src={item.image} alt={item.name} className={styles.itemImage} />
+                  <Image src={item.image} alt={item.name} width={60} height={60} className={styles.itemImage} style={{ objectFit: 'cover' }} />
                   <div className={styles.itemDetails}>
                     <div>
                       <div className={styles.itemHeader}>
