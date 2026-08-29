@@ -9,22 +9,22 @@ import styles from "./HeroSection.module.css";
 const defaultSlides = [
   {
     id: 1,
-    title: "Cõ L? Cao C?p",
-    subtitle: "Gi?m giá 20% cho d?ng cõ l? m?i nh?t nh?p kh?u t? M?",
+    title: "Cï¿½ L? Cao C?p",
+    subtitle: "Gi?m giï¿½ 20% cho d?ng cï¿½ l? m?i nh?t nh?p kh?u t? M?",
     image: "/images/cue_1.png",
     link: "/shop?category=co-lo"
   },
   {
     id: 2,
     title: "Anhly Bida",
-    subtitle: "Kh?ng ð?nh phong cách và ð?ng c?p trên t?ng ðý?ng cõ",
+    subtitle: "Kh?ng ï¿½?nh phong cï¿½ch vï¿½ ï¿½?ng c?p trï¿½n t?ng ï¿½ï¿½?ng cï¿½",
     image: "/images/balls_1.png",
     link: "/shop"
   },
   {
     id: 3,
-    title: "Ph? Ki?n Chính H?ng",
-    subtitle: "Bao da, lõ, ð?u cõ chu?n qu?c t? dành riêng cho dân chuyên",
+    title: "Ph? Ki?n Chï¿½nh H?ng",
+    subtitle: "Bao da, lï¿½, ï¿½?u cï¿½ chu?n qu?c t? dï¿½nh riï¿½ng cho dï¿½n chuyï¿½n",
     image: "/images/chalk_1.png",
     link: "/shop?category=phu-kien"
   }
@@ -54,7 +54,7 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // T? ð?ng trý?t m?i 5 giây
+    }, 5000); // T? ï¿½?ng trï¿½?t m?i 5 giï¿½y
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -96,7 +96,7 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
               key={index}
               className={`${styles.dot} ${index === currentSlide ? styles.activeDot : ""}`}
               onClick={() => setCurrentSlide(index)}
-              aria-label={`Chuy?n ð?n slide ${index + 1}`}
+              aria-label={`Chuy?n ï¿½?n slide ${index + 1}`}
             />
           ))}
         </div>

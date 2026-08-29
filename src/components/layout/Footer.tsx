@@ -13,7 +13,7 @@ export default function Footer() {
   const displayContact = {
     phone: contactInfo?.phone || '0123 456 789',
     email: contactInfo?.email || 'contact@anhlybida.com',
-    address: contactInfo?.address || '123 Ðý?ng Bida, TP. HCM',
+    address: contactInfo?.address || '123 ï¿½ï¿½?ng Bida, TP. HCM',
   };
 
   return (
