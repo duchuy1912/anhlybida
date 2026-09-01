@@ -1,9 +1,9 @@
-import { supabase } from "@/lib/supabaseClient";
+﻿import { supabase } from "@/lib/supabaseClient";
 import HomeContent from "./HomeContent";
 
 export const revalidate = 60;
 
-// �?nh ngh?a server component �? t? �?ng fetch data khi load trang
+// ï¿½?nh ngh?a server component ï¿½? t? ï¿½?ng fetch data khi load trang
 export default async function Home() {
   const [{ data: products }, { data: categories }, { data: banners }] = await Promise.all([
     supabase.from("products").select("*").order("created_at", { ascending: false }),
@@ -17,3 +17,4 @@ export default async function Home() {
 
   return <HomeContent allProducts={allProducts} categories={allCategories} banners={allBanners} />;
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -9,22 +9,22 @@ import styles from "./HeroSection.module.css";
 const defaultSlides = [
   {
     id: 1,
-    title: "C� L? Cao C?p",
-    subtitle: "Gi?m gi� 20% cho d?ng c� l? m?i nh?t nh?p kh?u t? M?",
+    title: "CÆ¡ Lá»— Cao Cáº¥p",
+    subtitle: "Giáº£m giĂ¡ 20% cho dĂ²ng cÆ¡ lá»— má»›i nháº¥t nháº­p kháº©u tá»« Má»¹",
     image: "/images/cue_1.png",
     link: "/shop?category=co-lo"
   },
   {
     id: 2,
     title: "Anhly Bida",
-    subtitle: "Kh?ng �?nh phong c�ch v� �?ng c?p tr�n t?ng ��?ng c�",
+    subtitle: "Kháº³ng Ä‘á»‹nh phong cĂ¡ch vĂ  Ä‘áº³ng cáº¥p trĂªn tá»«ng Ä‘Æ°á»ng cÆ¡",
     image: "/images/balls_1.png",
     link: "/shop"
   },
   {
     id: 3,
-    title: "Ph? Ki?n Ch�nh H?ng",
-    subtitle: "Bao da, l�, �?u c� chu?n qu?c t? d�nh ri�ng cho d�n chuy�n",
+    title: "Phá»¥ Kiá»‡n ChĂ­nh HĂ£ng",
+    subtitle: "Bao da, lÆ¡, Ä‘áº§u cÆ¡ chuáº©n quá»‘c táº¿ dĂ nh riĂªng cho dĂ¢n chuyĂªn",
     image: "/images/chalk_1.png",
     link: "/shop?category=phu-kien"
   }
@@ -54,7 +54,7 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // T? �?ng tr�?t m?i 5 gi�y
+    }, 5000); // T? ï¿½?ng trï¿½?t m?i 5 giï¿½y
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -96,7 +96,7 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
               key={index}
               className={`${styles.dot} ${index === currentSlide ? styles.activeDot : ""}`}
               onClick={() => setCurrentSlide(index)}
-              aria-label={`Chuy?n �?n slide ${index + 1}`}
+              aria-label={`Chuy?n ï¿½?n slide ${index + 1}`}
             />
           ))}
         </div>
@@ -104,3 +104,4 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
     </section>
   );
 }
+
