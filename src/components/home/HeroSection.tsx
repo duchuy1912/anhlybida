@@ -54,7 +54,7 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // T? ï¿½?ng trï¿½?t m?i 5 giï¿½y
+    }, 5000); // Tự động trượt mỗi 5 giây
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -96,7 +96,7 @@ export default function HeroSection({ initialBanners = [] }: { initialBanners?: 
               key={index}
               className={`${styles.dot} ${index === currentSlide ? styles.activeDot : ""}`}
               onClick={() => setCurrentSlide(index)}
-              aria-label={`Chuy?n ï¿½?n slide ${index + 1}`}
+              aria-label={`Chuyển đến slide ${index + 1}`}
             />
           ))}
         </div>

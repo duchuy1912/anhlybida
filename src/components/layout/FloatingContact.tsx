@@ -44,13 +44,13 @@ export default function FloatingContact() {
         <span className={styles.tooltip}>Messenger</span>
       </a>
 
-      <a href={`tel:${phone.replace(/\D/g, "")}`} className={styles.callBtn} aria-label="G?i �i?n">
+      <a href={`tel:${phone.replace(/\D/g, "")}`} className={styles.callBtn} aria-label="Gọi điện">
         <div className={styles.callIconWrapper}>
           <Phone className={styles.callIcon} size={20} />
           <div className={styles.pulseRing}></div>
         </div>
         <div className={styles.callText}>
-          <span className={styles.callLabel}>G?i mi?n ph�</span>
+          <span className={styles.callLabel}>Gọi miễn phí</span>
           <strong className={styles.callNumber}>{formattedPhone}</strong>
         </div>
       </a>
