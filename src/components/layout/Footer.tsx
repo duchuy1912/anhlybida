@@ -10,12 +10,6 @@ import { useSiteSettings } from '@/context/SiteSettingsContext';
 export default function Footer() {
   const { contactInfo } = useSiteSettings();
   
-  const displayContact = {
-    phone: contactInfo?.phone || '0123 456 789',
-    email: contactInfo?.email || 'contact@anhlybida.com',
-    address: contactInfo?.address || '123 Đường Bida, TP. HCM',
-  };
-
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
@@ -35,9 +29,9 @@ export default function Footer() {
         </div>
         <div className={styles.col}>
           <h3>Liên hệ</h3>
-          <p>Điện thoại: {displayContact.phone}</p>
-          <p>Email: {displayContact.email}</p>
-          <p>Địa chỉ: {displayContact.address}</p>
+          {contactInfo?.phone && <p>Điện thoại: {contactInfo.phone}</p>}
+          {contactInfo?.email && <p>Email: {contactInfo.email}</p>}
+          {contactInfo?.address && <p>Địa chỉ: {contactInfo.address}</p>}
         </div>
       </div>
       <div className={`container ${styles.bottom}`}>
@@ -46,4 +40,5 @@ export default function Footer() {
     </footer>
   );
 }
+
 
